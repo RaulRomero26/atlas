@@ -30,6 +30,7 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
     //fotografia
     $imagen = explode("?", $data[$cantidad_grupo]['grupo']->FOTOGRAFIA);
     $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
+   // echo($pathImagesFH);
     if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
         $type = exif_imagetype($pathImagesFH);
         $extension = '';
@@ -100,6 +101,7 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             //fotografia
             $imagen = explode("?", $data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
             $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
+           // echo($pathImagesFH);
             if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
                 $type = exif_imagetype($pathImagesFH);
                 $extension = '';
@@ -157,7 +159,7 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             $pdf->Cell(5,4,utf8_decode(mb_strtoupper($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
             //fotografia
             $imagen = explode("?", $data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
-            $pathImagesFH = base_url."public/files/Grupos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
+            $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
             if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
                 $type = exif_imagetype($pathImagesFH);
                 $extension = '';
