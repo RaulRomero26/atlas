@@ -74,9 +74,8 @@ const readTableIntegrantes = () => {
                 udc_int: table.rows[i].cells[7].innerHTML,
                 utc_int: table.rows[i].cells[8].innerHTML,
                 face_int: table.rows[i].cells[9].innerHTML,
-                otros_dom_int: table.rows[i].cells[10].innerHTML,
-                vehi_int: table.rows[i].cells[11].innerHTML,
-                asociado_int: table.rows[i].cells[12].innerHTML,
+                asociado_int: table.rows[i].cells[10].innerHTML,
+                antece_int: table.rows[i].cells[11].innerHTML
             }
         });
     }

@@ -21,6 +21,7 @@ window.onload = function() {
         document.getElementById('antecedentes').value=data['grupo']['ANTECEDENTES']
 
         pathImagesFotos = `${base_url_js}public/files/GestorCasos/${data['grupo']['ID_BANDA']}/Grupo/`
+        pathPlaceholder = `${base_url_js}public/files/GestorCasos/placeholderprofile.jpg`
         
         const rowsTableIntegrantes = data.integrantes;
         console.log(rowsTableIntegrantes)
@@ -48,6 +49,12 @@ window.onload = function() {
 
             if (rowsTableIntegrantes[i].PATH_IMAGEN.length != 0) {
                 createElementFoto(pathImagesFotos + srcImage[0], i + 1, 'Photo');
+            }else{
+                createElementFoto(pathPlaceholder, i + 1, 'Photo')
+            }
+            
+            if(srcImage == '' || srcImage == null){
+                createElementFoto(pathPlaceholder, i + 1, 'Photo')
             }
 
             /*srcImage = rowsTableIntegrantes[i].PATH_IMAGEN
