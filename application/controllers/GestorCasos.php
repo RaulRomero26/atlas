@@ -102,15 +102,6 @@ class GestorCasos extends Controller
             case '2':
                 $data['filtroNombre'] = "Grupos Delictivos";
                 break;
-            case '3':
-                $data['filtroNombre'] = "Elementos Participantes";
-                break;
-            case '4':
-                $data['filtroNombre'] = "Objetos Asegurados";
-                break;
-            case '5':
-                $data['filtroNombre'] = "Armas Aseguradas";
-                break;
         }
 
         $this->view('templates/header', $data);
@@ -140,7 +131,7 @@ class GestorCasos extends Controller
 
     public function editarGrupo(){
         //comprobar los permisos para dejar pasar al módulo
-        if (!isset($_SESSION['userdata']) || ($_SESSION['userdata']->Modo_Admin != 1)) {
+        if (!isset($_SESSION['userdata']) || ($_SESSION['userdata']->Modo_Admin != 1 && $_SESSION['userdata']->Seguimientos[3] != '1')) {
             header("Location: " . base_url . "Inicio");
             exit();
         }
@@ -164,6 +155,7 @@ class GestorCasos extends Controller
         
 
         $integrantes = json_decode($_POST['integrantes_table']);
+        $foto_grupos = json_decode($_POST['foto_grupo']);
 
         $success = true;
         
@@ -190,7 +182,17 @@ class GestorCasos extends Controller
                         $result = $this->uploadImagePhotoRemisiones($integrante->row->image, $caso, $path_carpeta, $path_carpeta . $integrante->row->nameImage . ".png");
                     }
                 }
-
+                foreach ($foto_grupos as $foto_grupo) {
+                    if ($foto_grupo->row->typeImage == 'File') {
+                        $type = $_FILES["foto_grupo"]['type'];
+                        $extension = explode("/", $type);
+                        if(count($extension)>1)
+                            $result = $this->uploadImageFileRemisiones("foto_grupo", $_FILES, $caso, $path_carpeta, "foto_grupo" . "." . $extension[1]);
+                    }
+                    if ($foto_grupo->row->typeImage == 'Photo') {
+                        $result = $this->uploadImagePhotoRemisiones("foto_grupo", $caso, $path_carpeta, $path_carpeta . "foto_grupo" . ".png");
+                    }
+                }
                     $data_p['status'] =  true;
             
                 } else{
@@ -203,7 +205,7 @@ class GestorCasos extends Controller
     public function editGrupoFetch(){
        
         $integrantes = json_decode($_POST['integrantes_table']);
-
+        $foto_grupos = json_decode($_POST['foto_grupo']);
         $success = true;
         
         if ($success) {
@@ -227,6 +229,17 @@ class GestorCasos extends Controller
                     }
                     if ($integrante->row->typeImage == 'Photo') {
                         $result = $this->uploadImagePhotoRemisiones($integrante->row->image, $caso, $path_carpeta, $path_carpeta . $integrante->row->nameImage . ".png");
+                    }
+                }
+                foreach ($foto_grupos as $foto_grupo) {
+                    if ($foto_grupo->row->typeImage == 'File') {
+                        $type = $_FILES["foto_grupo"]['type'];
+                        $extension = explode("/", $type);
+                        if(count($extension)>1)
+                            $result = $this->uploadImageFileRemisiones("foto_grupo", $_FILES, $caso, $path_carpeta, "foto_grupo" . "." . $extension[1]);
+                    }
+                    if ($foto_grupo->row->typeImage == 'Photo') {
+                        $result = $this->uploadImagePhotoRemisiones("foto_grupo", $caso, $path_carpeta, $path_carpeta . "foto_grupo" . ".png");
                     }
                 }
 
@@ -591,10 +604,24 @@ class GestorCasos extends Controller
 
             return true;
     }
+    public function generarExportLinks($extra_cad = "", $filtro = 1)
+    {
+        if ($extra_cad != "") {
+            $dataReturn['csv'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['excel'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['pdf'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=PDF' . $extra_cad . '&filtroActual=' . $filtro;
+            //return $dataReturn;
+        } else {
+            $dataReturn['csv'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['excel'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['pdf'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=PDF' . $extra_cad . '&filtroActual=' . $filtro;
+        }
+        return $dataReturn;
+    }
     public function generarFicha()
     {
         //comprobar los permisos para dejar pasar al módulo
-        if (!isset($_SESSION['userdata']) || ($_SESSION['userdata']->Modo_Admin != 1)) {
+        if (!isset($_SESSION['userdata']) || ($_SESSION['userdata']->Modo_Admin != 1 && $_SESSION['userdata']->Seguimientos[3] != '1')) {
             header("Location: " . base_url . "Inicio");
             exit();
         }
@@ -615,11 +642,9 @@ class GestorCasos extends Controller
             $results = $this->GestorCaso->getRemisionDByCadena($cadena, $filtroActual);
             $extra_cad = ($cadena != "") ? ("&cadena=" . $cadena) : ""; //para links conforme a búsqueda
 
-            //$dataReturn = "jeje";
-
             $dataReturn['infoTable'] = $this->generarInfoTable($results['rows_Rems'], $filtroActual);
             $dataReturn['links'] = $this->generarLinks($results['numPage'], $results['total_pages'], $extra_cad, $filtroActual);
-        //    $dataReturn['export_links'] = $this->generarExportLinks($extra_cad, $filtroActual);
+            $dataReturn['export_links'] = $this->generarExportLinks($extra_cad, $filtroActual);
             $dataReturn['total_rows'] = "Total registros: " . $results['total_rows'];
             $dataReturn['dropdownColumns'] = $this->generateDropdownColumns($filtroActual);
 

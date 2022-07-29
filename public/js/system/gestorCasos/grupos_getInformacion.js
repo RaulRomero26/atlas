@@ -22,7 +22,19 @@ window.onload = function() {
 
         pathImagesFotos = `${base_url_js}public/files/GestorCasos/${data['grupo']['ID_BANDA']}/Grupo/`
         pathPlaceholder = `${base_url_js}public/files/GestorCasos/placeholderprofile.jpg`
+
+        pathImagesFotosG = `${base_url_js}public/files/GestorCasos/${data['grupo']['ID_BANDA']}/Grupo/`
+        pathPlaceholderG = `${base_url_js}public/files/GestorCasos/placeholdergrupo.jpg`
         
+        srcImageG = data['grupo']['FOTOGRAFIA']
+        console.log(srcImageG);
+        srcImageG = srcImageG.split('?')
+        console.log(srcImageG);
+        if (data['grupo']['ANTECEDENTES'].length != 0 && srcImageG[0] != '.png') {
+            createElementFotoGrupo(pathImagesFotosG + srcImageG[0], 'Photo');
+        }else{
+            createElementFotoGrupo(pathPlaceholderG, 'Photo')
+        }
         const rowsTableIntegrantes = data.integrantes;
         console.log(rowsTableIntegrantes)
         for (let i = 0; i < rowsTableIntegrantes.length; i++) {

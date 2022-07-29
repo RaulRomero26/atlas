@@ -14,7 +14,19 @@ class GestorCaso
         $repla=['"','\''];
         $data['status'] = true;
         try{
-            $this->db->beginTransaction();  //inicia la transaction
+                $this->db->beginTransaction();  //inicia la transaction
+                $foto = json_decode($post['foto_grupo']);
+                $name2 = '';$date2 = date("Ymdhis");
+                if ($foto[0]->row->typeImage == 'File') {
+                    $type = $_FILES["foto_grupo"]['type'];
+                    $extension = explode("/", $type);
+                    if(count($extension)>1)
+                        $name2 = "foto_grupo" . "." . $extension[1] . "?v=" . $date2;
+                    else
+                        $name2 = ".png?v=" . $date2;
+                } else {
+                    $name2 = "foto_grupo" . ".png?v=" . $date2;
+                }
                 $sql = "INSERT
                         INTO atlas_grupos(
                             NOMBRE_BANDA,
@@ -23,7 +35,8 @@ class GestorCaso
                             PELIGROSIDAD,
                             ZONAS,
                             COLONIAS,
-                            ACTIVIDADES_ILEGALES
+                            ACTIVIDADES_ILEGALES,
+                            FOTOGRAFIA
                         )
                         VALUES(
                             '".mb_strtoupper($post['nombre_grupo'])."',
@@ -32,7 +45,8 @@ class GestorCaso
                             '".$post['peligrosidad']."',
                             '".$post['zonas_final']."',
                             '".$post['colonias_final']."',
-                            '".$post['delitos_asociados']."'
+                            '".$post['delitos_asociados']."',
+                            '".$name2."'
                         )
                 ";
                 $this->db->query($sql);
@@ -108,7 +122,22 @@ class GestorCaso
         $data['status'] = true;
     
         try{
+         //   print_r($_FILES);
             $this->db->beginTransaction();  //inicia la transaction
+            $foto = json_decode($post['foto_grupo']);
+            $name2 = '';$date2 = date("Ymdhis");
+            if ($foto[0]->row->typeImage == 'File') {
+                $type = $_FILES["foto_grupo"]['type'];
+                $extension = explode("/", $type);
+                if(count($extension)>1)
+                    $name2 = "foto_grupo" . "." . $extension[1] . "?v=" . $date2;
+                else{
+                    $ruta_anterior=explode("/",$post['imagen_anterior']);
+                    $name2 = $ruta_anterior[count($ruta_anterior)-1]."?v=" . $date2;
+                }
+            } else {
+                $name2 = "foto_grupo" . ".png?v=" . $date2;
+            }
             $id_grupo = $post['no_grupo'];
             $data['grupo'] = $id_grupo;
             $repla=['"','\''];
@@ -119,7 +148,8 @@ class GestorCaso
                     PELIGROSIDAD         = '" . trim($post['peligrosidad']) . "',
                     ZONAS         = '" . trim($post['zonas_final']) . "',
                     COLONIAS   = '" . trim($post['colonias_final']) . "',
-                    ANTECEDENTES           = '" . str_replace($repla, '`',$post['antecedentes']) . "'
+                    ANTECEDENTES           = '" . str_replace($repla, '`',$post['antecedentes']) . "',
+                    FOTOGRAFIA           = '" . $name2 . "'
                     WHERE ID_BANDA = '" . $id_grupo . "'";
                 $this->db->query($sql);
                 $this->db->execute();

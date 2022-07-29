@@ -23,6 +23,8 @@ async function crear_guardar(e) {
     myFormData.append('integrantes_table', JSON.stringify(await readTableSenas()));
     myFormData.append('zonas_final', readTableZonas());
     myFormData.append('colonias_final', readTableColonias());
+    myFormData.append('foto_grupo', JSON.stringify(await enviarImagenGrupo()));
+    myFormData.append('imagen_anterior', document.getElementById("images_row_grupo").src);
     for (var pair of myFormData.entries()) {
          console.log(pair[0] + ', ' + pair[1]);
     }
@@ -97,7 +99,27 @@ const readTableColonias = () => {
         colonias += table.rows[i].cells[1].innerHTML+"$"
     return colonias;
 }
-
+const enviarImagenGrupo = async() => {
+    const type = 'File';
+    base64 = document.getElementById('fileFoto_grupo');
+    console.log(type);
+    nameImage = 'fileFoto_grupo';
+    let integrantes = [];
+    if (type != 'File') {
+        isPNG = base64.src.split('.');
+        if (isPNG[1] != undefined) {
+            await toDataURL(base64.src)
+                .then(myBase64 => {
+                    integrantes.push(dataImageGrupo(type, nameImage, myBase64));
+                })
+        } else {
+            integrantes.push(dataImageGrupo(type, nameImage, base64.src));
+        }
+    } else {
+        integrantes.push(dataImageGrupo(type, nameImage, null));
+    }
+    return integrantes;
+}
 const readTableSenas = async() => {
     const table = document.getElementById('integrantes_banda');
     let integrantes = [];
@@ -183,4 +205,14 @@ const validateImages = async({integrantes}) => {
     });
 
     return band;
+}
+
+const dataImageGrupo = (typeImage, nameImage, dataImage) => {
+    return {
+        ['row']: {
+        typeImage: typeImage,
+        nameImage: nameImage,
+        image: dataImage
+        }
+    }
 }

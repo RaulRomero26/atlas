@@ -44,7 +44,7 @@
         <i class="fas fa-arrow-left"></i>
       </div>
       <div class="sidebar-header mt-4 text-center">
-        <h3>SARAI</h3>
+        <h3>ATLAS</h3>
       </div>
       <ul class="list-unstyled ">
         <li class="container mt-3">

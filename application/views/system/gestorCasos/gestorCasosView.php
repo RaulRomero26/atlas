@@ -60,14 +60,7 @@
                         $filtroActual = "&filtroActual=".$data['filtroActual'];
                     ?>
 
-                    <a id="id_link_excel" href="<?= base_url ?>GestorCasos/exportarInfo/?tipo_export=<?= "EXCEL".$cadenaExport.$filtroActual; ?>" class="btn" data-toggle="tooltip" data-placement="bottom" title="Exportar a Excel">
-                        <i class="material-icons ssc md-36">description</i>
-                        <!--img src="<?= base_url ?>public/media/icons/excelIcon.png" width="40px"--!-->
-                    </a>
-                    <a id="id_link_pdf" href="<?= base_url ?>GestorCasos/exportarInfo/?tipo_export=<?= "PDF".$cadenaExport.$filtroActual; ?>" target="_blank" class="btn mi_hide" data-toggle="tooltip" data-placement="bottom" title="Exportar a PDF">
-                        <i class="material-icons ssc md-36">picture_as_pdf</i>
-                        <!--img src="<?= base_url ?>public/media/icons/pdfIcon.png" width="40px"--!-->
-                    </a>
+                    
                 </div>
             </div>
         </div>
