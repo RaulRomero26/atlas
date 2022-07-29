@@ -147,6 +147,14 @@
                 <input type="text" class="form-control form-control-sm " id="face_int" name="face_int" >
                 <span class="span_error" id="face_int_error"></span>
             </div>
+            <div class="form-group col-lg-3">
+                <label for="categoria_int" class="label-form">Categoria :</label>
+                <select class="custom-select custom-select-sm" id="categoria_int" name="categoria_int">
+                    <option value="LIDER">Lider</option>
+                    <option value="INTEGRANTE">Integrante</option>
+                </select>
+                <span class="span_error" id="categoria_int_error"></span>
+            </div>
         </div>
         <div class="form-row mt-5">
             <div class="form-group col-lg-6">
@@ -180,6 +188,7 @@
                                 <th scope="col">Facebook</th>
                                 <th scope="col">Descripción </th>
                                 <th scope="col">Antecedentes por</th>
+                                <th scope="col">Categoria</th>
                                 <th scope="col">Fotografía</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
