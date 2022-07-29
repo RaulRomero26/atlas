@@ -11,6 +11,7 @@ class GestorCaso
 
 /*----------- FUNCION INSERT NUEVO EVENTO -------------------*/ 
     public function insertNuevoGrupo($post){
+        $repla=['"','\''];
         $data['status'] = true;
         try{
             $this->db->beginTransaction();  //inicia la transaction
@@ -25,8 +26,8 @@ class GestorCaso
                             ACTIVIDADES_ILEGALES
                         )
                         VALUES(
-                            '".$post['nombre_grupo']."',
-                            '".$post['antecedentes']."',
+                            '".mb_strtoupper($post['nombre_grupo'])."',
+                            '".str_replace($repla, '`',$post['antecedentes'])."',
                             '".$post['principal_actividad']."',
                             '".$post['peligrosidad']."',
                             '".$post['zonas_final']."',
@@ -77,7 +78,7 @@ class GestorCaso
                                 '" . trim($integrante->row->apep_int) . "',
                                 '" . trim($integrante->row->apem_int) . "',
                                 '" . trim($integrante->row->sexo_int) . "',
-                                '" . trim($integrante->row->curp_int) . "',
+                                '" .  mb_strtoupper(trim($integrante->row->curp_int)) . "',
                                 '" . trim($integrante->row->udc_int) . "',
                                 '" . trim($integrante->row->utc_int) . "',
                                 '" . trim($integrante->row->alias_int) . "',
