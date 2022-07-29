@@ -47,6 +47,23 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
         }
         $pdf->Image($pathImagesFH,102,69,90,68,$extension);
     }
+    else{
+        $pathImagesFH = base_url."public/files/GestorCasos/placeholdergrupo.jpg";
+        $type = exif_imagetype($pathImagesFH);
+        $extension = '';
+        switch($type){
+            case 1:
+                $extension = 'gif';
+            break;
+            case 2:
+                $extension = 'jpeg';
+            break;
+            case 3:
+                $extension = 'png';
+            break;
+        }
+        $pdf->Image($pathImagesFH,102,69,90,68,$extension);
+    }
     $pdf->SetY(155);
     $pdf->SetX(102);
     $pdf->Multicell(75,4,utf8_decode($data[$cantidad_grupo]['grupo']->PELIGROSIDAD));
@@ -118,6 +135,23 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
                 }
                 $pdf->Image($pathImagesFH,23,47,38,42,$extension);
             }
+            else{
+                $pathImagesFH = base_url."public/files/GestorCasos/placeholderprofile.jpg";
+                $type = exif_imagetype($pathImagesFH);
+                $extension = '';
+                switch($type){
+                    case 1:
+                        $extension = 'gif';
+                    break;
+                    case 2:
+                        $extension = 'jpeg';
+                    break;
+                    case 3:
+                        $extension = 'png';
+                    break;
+                }
+                $pdf->Image($pathImagesFH,23,47,38,42,$extension);
+            }
             $pdf->SetY(50);
             $pdf->SetX(63);
             $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ESTATUS));
@@ -161,6 +195,23 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             $imagen = explode("?", $data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
             $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
             if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
+                $type = exif_imagetype($pathImagesFH);
+                $extension = '';
+                switch($type){
+                    case 1:
+                        $extension = 'gif';
+                    break;
+                    case 2:
+                        $extension = 'jpeg';
+                    break;
+                    case 3:
+                        $extension = 'png';
+                    break;
+                }
+                $pdf->Image($pathImagesFH,109,47,38,42,$extension);
+            }
+            else{
+                $pathImagesFH = base_url."public/files/GestorCasos/placeholderprofile.jpg";
                 $type = exif_imagetype($pathImagesFH);
                 $extension = '';
                 switch($type){
