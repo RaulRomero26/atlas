@@ -86,7 +86,7 @@ class GestorCaso
                                 '" . trim($integrante->row->alias_int) . "',
                                 '" . trim($integrante->row->face_int) . "',
                                 '" . trim($integrante->row->antece_int) . "',
-                                '" . trim($integrante->row->asociado_int) . "',
+                                '" . str_replace($repla, '`',trim($integrante->row->asociado_int)) . "',
                                 '" . trim($integrante->row->estado_int) . "',
                                 '" . trim($name) . "'
                             )
@@ -170,7 +170,7 @@ class GestorCaso
                                 '" . trim($integrante->row->utc_int) . "',
                                 '" . trim($integrante->row->alias_int) . "',
                                 '" . trim($integrante->row->face_int) . "',
-                                '" . trim($integrante->row->asociado_int) . "',
+                                '" . str_replace($repla, '`',trim($integrante->row->asociado_int)) . "',
                                 '" . trim($integrante->row->antece_int) . "',
                                 '" . trim($integrante->row->estado_int) . "',
                                 '" . trim($name) . "'

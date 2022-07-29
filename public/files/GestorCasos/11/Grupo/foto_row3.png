@@ -1,0 +1,207 @@
+
+				
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Planeación | Inicio</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="http://localhost/atlas/public/css/bootstrap/bootstrap.css">
+    <!-- ----- ----- ----- Root CSS ----- ----- ----- -->
+    <link rel="stylesheet" href="http://localhost/atlas/public/css/general/root.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="http://localhost/atlas/public/css/template/style.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="http://localhost/atlas/public/css/template/header/customScrollbar.min.css">
+    <!--Material Icons-->
+    <link rel="stylesheet" href="http://localhost/atlas/public/media/icons/material_design_icons/material-icons.css">
+    <!--link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"-->
+    <!-- <link rel='shortcut icon' type='image/ico' href='http://localhost/atlas/public/media/icons/favicon.ico' /> -->
+    <!--link rel="stylesheet" href="http://localhost/atlas/public/media/icons/bootstrap_icons/bootstrap-icons.css"-->
+    <script src= 'http://localhost/atlas/public/js/libraries/autocomplete.js'></script>
+  <link rel="stylesheet" type="text/css" href='http://localhost/atlas/public/css/libraries/autocomplete.js'>
+    
+    <meta name="theme-color" content="#6D0725" />
+
+
+    <!-- Font Awesome JS -->
+    <script defer src="http://localhost/atlas/public/js/template/header/solid.js"></script>
+    <script defer src="http://localhost/atlas/public/js/template/header/fontawesome.js"></script>
+
+        
+  </head>
+
+
+
+  <body>
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+      <div id="dismiss">
+        <i class="fas fa-arrow-left"></i>
+      </div>
+      <div class="sidebar-header mt-4 text-center">
+        <h3>SARAI</h3>
+      </div>
+      <ul class="list-unstyled ">
+        <li class="container mt-3">
+          <div class="text-divider">
+            <i class="material-icons">home</i>
+          </div>
+        </li>
+        <li class="container">
+          <a href="http://localhost/atlas/Inicio">Inicio</a>
+        </li>
+        <li class="container mt-3">
+          <div class="text-divider">
+            <i class="material-icons">desktop_windows</i>
+          </div>
+        </li>
+                <li class="container">
+          <a href="http://localhost/atlas/GestorCasos">Gestor de Casos</a>
+        </li>
+  
+                
+        
+        
+        
+                  <li class="container mt-3">
+            <div class="text-divider">
+              <i class="material-icons">admin_panel_settings</i>
+            </div>
+          </li>
+          <li class="container">
+            <a href="http://localhost/atlas/UsersAdmin/">Usuarios</a>
+          </li>
+          <li class="container">
+            <a href="http://localhost/atlas/Historiales">Historial</a>
+          </li>
+                <li class="container mt-3">
+          <div class="text-divider">
+            <i class="material-icons">account_box</i>
+          </div>
+        </li>
+      </ul>
+      <ul class="list-unstyled CTAs">
+        <li class="container">
+          <a href="http://localhost/atlas/Cuenta" class="download btn-ssc">Mi perfil</a>
+        </li>
+        <li class="container">
+          <a href="http://localhost/atlas/Login/logOut" class="download">Cerrar sesión</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- Page Content  -->
+    <div id="content">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 d-flex justify-content-center align-items-center">
+            <!-- <img src="http://localhost/atlas/public/media/images/banner.png" alt="" width="40%" class=""> -->
+            <img src="http://localhost/atlas/public/media/images/logo21.png" width="15%" class="my-1">
+          </div>
+          <div class="col-sm-6 pr-0 d-flex justify-content-center align-items-center">
+            <!-- <img src="http://localhost/atlas/public/media/images/estrella-c.png" width="10%" class="my-1"> -->
+          </div>
+        </div>
+      </div>
+      <nav class="navbar sticky-top" id="sidenav_p">
+        <div class="container">
+          <img class="navbar-brand" src="http://localhost/atlas/public/media/icons/menu.svg" alt="" id="sidebarCollapse" width="24px">
+          <div class="dropdown">
+            <button class="btn btn-nav dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Bienvenida(o) LAURA IVON            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="http://localhost/atlas/Cuenta">Mi perfil</a>
+              <a class="dropdown-item" href="http://localhost/atlas/Login/logOut">Cerrar sesión</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="">
+      <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="text-center">
+                <img src="http://localhost/atlas/public/media/images/banner.png" alt="" width="350px" height="80px" class="mt-4 mb-3">
+                <h5 class="card-title mb-5 mt-3">SARAI</h5>
+                <form id="data_login_modal" onsubmit="event.preventDefault();">
+                  <div class="form-row  mb-5 container-fluid">
+                      <div class="col-md-12 col-lg-5 mb-lg-3 mb-md-1 mt-lg-1">
+                          <label for="usuario">Usuario:</label>
+                      </div>
+
+                      <div class="col-md-12 col-lg-7 mt-lg-1">
+                          <input name="User_Name" type="text" class="form-control" id="usuario" placeholder="Ingrese su usuario" required>
+                          <span class="span_error" id="error_usuario_login"></span>
+                      </div>
+
+                      <div class="col-md-12 col-lg-5 mb-lg-3 mb-md-1 mt-lg-4">
+                          <label for="contrasena">Contraseña:</label>
+                      </div>
+
+                      <div class="col-md-12 col-lg-7 mt-lg-4">
+                          <input name="Password" type="password" class="form-control" id="contrasena" placeholder="Ingrese su contraseña" required>
+                          <span class="span_error" id="error_contrasena_login"></span>
+                      </div>
+                  </div>
+                    
+                  <div class=" mb-5" >
+                      <span style="color: red;" id="error_login_feedback"></span>
+                  </div>
+                  <div class="form-check mt-n5">
+                      <input class="form-check-input" type="checkbox" value="" id="check_pass">
+                      <label class="form-check-label" for="check_pass">
+                          Mostrar contraseña
+                      </label>
+                  </div>
+                  <button class="btn btn-ssc mt-4" type="button" id="btn_login_fetch">Entrar</button>
+                </form>
+                <img src="http://localhost/atlas/public/media/images/logo_transito.png" alt="" width="100px" class="mt-4">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><div class="container">
+    <h5 class="display-4 text-center mt-5">Bienvenida(o)</h5>
+    <p class="mt-5 p_1"> La Secretaría de Seguridad Ciudadana del municipio 
+    	de Puebla trabaja en la prevención de hechos delictivos, por lo que esta dependencia 
+    	se encuentra en constante capacitación para poder dar un mejor servicio utilizando 
+    	tácticas mejoradas para la prevención y erradicación de los mismos.
+</div>
+            </div>
+        </div>
+        <div class="overlay"></div>
+        <div class="overlay"></div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script type="text/javascript">
+            const base_url_js = 'http://localhost/atlas/',
+                base_url = 'http://localhost/seguimientos/Remisiones/',
+                pathFilesRemisiones = `http://localhost/seguimientos/public/files/Remisiones/`;
+                pathFilesSeguimientos = `http://localhost/seguimientos/public/files/Seguimientos/`;
+        </script>
+        <script src="http://localhost/atlas/public/js/template/footer/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="http://localhost/atlas/public/js/bootstrap/bootstrap.js" ></script>
+        <script src="http://localhost/atlas/public/js/template/footer/customScrollbar.min.js" ></script>
+        <script src="http://localhost/atlas/public/js/template/sidenav/principal.js"></script>
+        <script src="http://localhost/atlas/public/js/libraries/FormValidator.js"></script>
+        <script src="http://localhost/atlas/public/js/libraries/api_mapbox.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="popover"]').popover();
+            });
+        </script>
+
+        
+        <footer class="d-flex justify-content-center align-items-center footer">
+            <span class="footer-copyright text-center py-3 gray-font ">©2020 Todos los derechos reservados. SSCMP</span>
+        </footer>
+    </body>
+</html>
