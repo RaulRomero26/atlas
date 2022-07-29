@@ -52,6 +52,30 @@ function createElementFoto(src, index, type, view) {
     }
 }
 
+function createElementFotoGrupo(src, type, view) {
+    const div = document.getElementById('imageContent_grupo');
+
+    if (view === undefined) {
+        div.innerHTML = `
+            <div>
+                <div class="d-flex justify-content-end">
+                    <span onclick="deleteImageFoto('grupo')" class="deleteFile">x</span>
+                </div>
+                <img class="img-fluid ${type}" id="images_row_grupo" width="100" src="${src}">
+                <input type="hidden" class="grupo ${type}"/>
+            </div>
+        `;
+    } else {
+        div.innerHTML = `
+            <div>
+                <img class="img-fluid ${type}" id="images_row_${index}" width="100" src="${src}">
+                <input type="hidden" class="${index} ${type}"/>
+            </div>
+        `;
+    }
+}
+
+
 function uploadFile(event, type) {
     console.log('file fotos');
     let file;
@@ -83,6 +107,22 @@ function uploadFile(event, type) {
             const row = event.currentTarget;
             const index = row.parentNode.parentNode.parentNode.parentNode.rowIndex;
             createElementVideo(src, index, 'File');
+        } else {
+            document.getElementById('msg_fotosParticulares').innerHTML = '<div class="alert alert-warning text-center" role="alert">Verificar el archivo cargado.<br>Posibles errores: <br> - Archivo muy pesado (Máximo 8 megas). <br> -Extensión no aceptada (Extensiones aceptadas: jpeg, png, jpg, PNG).</div>';
+            window.scroll({
+                top: 0,
+                left: 100,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    if (event.currentTarget.classList.contains('uploadFileFotosGrupo')) {
+        if (validateImage(event.target)) {
+            const src = URL.createObjectURL(event.target.files[0]);
+            const row = event.currentTarget;
+            const index = row.parentNode.parentNode.parentNode.parentNode.rowIndex;
+            createElementFotoGrupo(src, 'File');
         } else {
             document.getElementById('msg_fotosParticulares').innerHTML = '<div class="alert alert-warning text-center" role="alert">Verificar el archivo cargado.<br>Posibles errores: <br> - Archivo muy pesado (Máximo 8 megas). <br> -Extensión no aceptada (Extensiones aceptadas: jpeg, png, jpg, PNG).</div>';
             window.scroll({

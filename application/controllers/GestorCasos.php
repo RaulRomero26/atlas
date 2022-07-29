@@ -128,7 +128,7 @@ class GestorCasos extends Controller
         $data = [
             'titulo'    => 'Sistema de Atlas | Atlas',
             'extra_css' => '<link rel="stylesheet" href="' . base_url . 'public/css/system/Remisiones/index.css">',
-            'extra_js'  => '<script src="' . base_url . 'public/js/system/GestorCasos/grupos_d.js"></script>'.
+            'extra_js'  =>  '<script src="' . base_url . 'public/js/system/GestorCasos/grupos_d.js"></script>'.
                             '<script src="' . base_url . 'public/js/system/GestorCasos/fotoP.js"></script>'.
                             '<script src="' . base_url . 'public/js/system/GestorCasos/grupos_add.js"></script>',
         ];
