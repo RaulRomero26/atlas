@@ -40,6 +40,7 @@ window.onload = function() {
                 face_int: rowsTableIntegrantes[i].PERFIL_FACEBOOK,
                 asociado_int: rowsTableIntegrantes[i].DESCRIPCION,
                 antece_int: rowsTableIntegrantes[i].ANTECEDENTES_PERSONA,
+                categoria_int: rowsTableIntegrantes[i].TIPO,
             }
             insertNewRowIntegrante(formData);
 

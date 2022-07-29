@@ -58,6 +58,7 @@ class GestorCaso
                     $sql = " INSERT
                             INTO atlas_personas(
                                 ID_BANDA,
+                                TIPO,
                                 NOMBRE,
                                 APELLIDO_PATERNO,
                                 APELLIDO_MATERNO,
@@ -74,6 +75,7 @@ class GestorCaso
                             )
                             VALUES(
                                 ".$id_grupo.",
+                                '" . trim($integrante->row->categoria_int) . "',
                                 '" . trim($integrante->row->nombre_int) . "',
                                 '" . trim($integrante->row->apep_int) . "',
                                 '" . trim($integrante->row->apem_int) . "',
@@ -141,6 +143,7 @@ class GestorCaso
                     $sql = " INSERT
                             INTO atlas_personas(
                                 ID_BANDA,
+                                TIPO,
                                 NOMBRE,
                                 APELLIDO_PATERNO,
                                 APELLIDO_MATERNO,
@@ -157,6 +160,7 @@ class GestorCaso
                             )
                             VALUES(
                                 ".$id_grupo.",
+                                '" . trim($integrante->row->categoria_int) . "',
                                 '" . trim($integrante->row->nombre_int) . "',
                                 '" . trim($integrante->row->apep_int) . "',
                                 '" . trim($integrante->row->apem_int) . "',

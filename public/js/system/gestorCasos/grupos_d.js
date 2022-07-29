@@ -4,7 +4,7 @@ let selectedRowIntegrantes = null;
 //DivMapa.style.cssText = 'display: none !important';
 
 const onFormIntegranteSubmit = () => {
-    const campos = ['nombre_int', 'apem_int', 'apep_int', 'sexo_int','estado_int', 'alias_int','curp_int', 'udc_int','utc_int', 'face_int', 'asociado_int','antece_int'];
+    const campos = ['nombre_int', 'apem_int', 'apep_int', 'sexo_int','estado_int', 'alias_int','curp_int', 'udc_int','utc_int', 'face_int', 'asociado_int','antece_int','categoria_int'];
 
   //  if (validateFormIntegrante(campos)) {
         let formData = readFormIntegrante(campos);
@@ -18,7 +18,7 @@ const onFormIntegranteSubmit = () => {
 
 }
 
-const insertNewRowIntegrante = ({ nombre_int, apem_int, apep_int, sexo_int,estado_int, alias_int,curp_int, udc_int,utc_int, face_int, asociado_int,antece_int }, type) => {
+const insertNewRowIntegrante = ({ nombre_int, apem_int, apep_int, sexo_int,estado_int, alias_int,curp_int, udc_int,utc_int, face_int, asociado_int,antece_int,categoria_int }, type) => {
 
     const table = document.getElementById('integrantes_banda').getElementsByTagName('tbody')[0];
     let newRow = table.insertRow(table.length);
@@ -35,7 +35,8 @@ const insertNewRowIntegrante = ({ nombre_int, apem_int, apep_int, sexo_int,estad
     newRow.insertCell(9).innerHTML = face_int;
     newRow.insertCell(10).innerHTML = asociado_int;
     newRow.insertCell(11).innerHTML = antece_int;
-    newRow.insertCell(12).innerHTML = `
+    newRow.insertCell(12).innerHTML = categoria_int;
+    newRow.insertCell(13).innerHTML = `
     <div class="d-flex justify-content-around" id="uploadContent_row${newRow.rowIndex}">
         <div class="form-group">
             <input type="file" name="foto_row${newRow.rowIndex}" accept="image/*" id="fileFoto_row${newRow.rowIndex}" class="inputfile uploadFileFotos" onchange="uploadFile(event)" data-toggle="tooltip" data-placement="bottom">
@@ -51,18 +52,18 @@ const insertNewRowIntegrante = ({ nombre_int, apem_int, apep_int, sexo_int,estad
 `;
 
     if (type === undefined) {
-        newRow.insertCell(13).innerHTML = `<button type="button" class="btn btn-primary" onclick="editIntegrante(this)"> 
+        newRow.insertCell(14).innerHTML = `<button type="button" class="btn btn-primary" onclick="editIntegrante(this)"> 
             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
             </svg>
         </button>`;
-        newRow.insertCell(14).innerHTML = `<input type="button" class="btn btn-primary" value="-" onclick="deleteRow(this,integrantes_banda)">`;
+        newRow.insertCell(15).innerHTML = `<input type="button" class="btn btn-primary" value="-" onclick="deleteRow(this,integrantes_banda)">`;
     }
 
 }
 
 const editIntegrante = (obj) => {
-    const campos = ['nombre_int', 'apem_int', 'apep_int', 'sexo_int','estado_int', 'alias_int','curp_int', 'udc_int','utc_int', 'face_int', 'asociado_int','antece_int'];
+    const campos = ['nombre_int', 'apem_int', 'apep_int', 'sexo_int','estado_int', 'alias_int','curp_int', 'udc_int','utc_int', 'face_int', 'asociado_int','antece_int','categoria_int'];
 
     document.getElementById('alertEditIntegrante').style.display = 'block';
 

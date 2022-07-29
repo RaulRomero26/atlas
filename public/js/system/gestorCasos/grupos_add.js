@@ -75,7 +75,8 @@ const readTableIntegrantes = () => {
                 utc_int: table.rows[i].cells[8].innerHTML,
                 face_int: table.rows[i].cells[9].innerHTML,
                 asociado_int: table.rows[i].cells[10].innerHTML,
-                antece_int: table.rows[i].cells[11].innerHTML
+                antece_int: table.rows[i].cells[11].innerHTML,
+                categoria_int: table.rows[i].cells[12].innerHTML
             }
         });
     }
@@ -105,7 +106,7 @@ const readTableSenas = async() => {
 
         for (let i = 1; i < table.rows.length; i++) {
            
-            const input = table.rows[i].cells[12].children[1].children[0];
+            const input = table.rows[i].cells[13].children[1].children[0];
             console.log(input);
             
             if (input != undefined) {
@@ -121,25 +122,25 @@ const readTableSenas = async() => {
                                 integrantes.push(dataImageSenas(table.rows[i].cells[0].innerHTML,table.rows[i].cells[1].innerHTML,table.rows[i].cells[2].innerHTML,
                                     table.rows[i].cells[3].innerHTML,table.rows[i].cells[4].innerHTML,table.rows[i].cells[5].innerHTML,table.rows[i].cells[6].innerHTML,
                                     table.rows[i].cells[7].innerHTML,table.rows[i].cells[8].innerHTML,table.rows[i].cells[9].innerHTML,table.rows[i].cells[10].innerHTML,
-                                    table.rows[i].cells[11].innerHTML, type, nameImage, myBase64));
+                                    table.rows[i].cells[11].innerHTML, table.rows[i].cells[12].innerHTML,type, nameImage, myBase64));
                             })
                     } else {
                         integrantes.push(dataImageSenas(table.rows[i].cells[0].innerHTML,table.rows[i].cells[1].innerHTML,table.rows[i].cells[2].innerHTML,
                             table.rows[i].cells[3].innerHTML,table.rows[i].cells[4].innerHTML,table.rows[i].cells[5].innerHTML,table.rows[i].cells[6].innerHTML,
                             table.rows[i].cells[7].innerHTML,table.rows[i].cells[8].innerHTML,table.rows[i].cells[9].innerHTML,table.rows[i].cells[10].innerHTML,
-                            table.rows[i].cells[11].innerHTML, type, nameImage, base64.src));
+                            table.rows[i].cells[11].innerHTML, table.rows[i].cells[12].innerHTML, type, nameImage, base64.src));
                     }
                 } else {
                     integrantes.push(dataImageSenas(table.rows[i].cells[0].innerHTML,table.rows[i].cells[1].innerHTML,table.rows[i].cells[2].innerHTML,
                         table.rows[i].cells[3].innerHTML,table.rows[i].cells[4].innerHTML,table.rows[i].cells[5].innerHTML,table.rows[i].cells[6].innerHTML,
                         table.rows[i].cells[7].innerHTML,table.rows[i].cells[8].innerHTML,table.rows[i].cells[9].innerHTML,table.rows[i].cells[10].innerHTML,
-                        table.rows[i].cells[11].innerHTML, type, nameImage, null));
+                        table.rows[i].cells[11].innerHTML,table.rows[i].cells[12].innerHTML, type, nameImage, null));
                 }
             } else {
                 integrantes.push(dataImageSenas(table.rows[i].cells[0].innerHTML,table.rows[i].cells[1].innerHTML,table.rows[i].cells[2].innerHTML,
                     table.rows[i].cells[3].innerHTML,table.rows[i].cells[4].innerHTML,table.rows[i].cells[5].innerHTML,table.rows[i].cells[6].innerHTML,
                     table.rows[i].cells[7].innerHTML,table.rows[i].cells[8].innerHTML,table.rows[i].cells[9].innerHTML,table.rows[i].cells[10].innerHTML,
-                    table.rows[i].cells[11].innerHTML, null, null, null));
+                    table.rows[i].cells[11].innerHTML,table.rows[i].cells[12].innerHTML, null, null, null));
             }
         }
     }
@@ -149,7 +150,7 @@ const readTableSenas = async() => {
 
 
 const dataImageSenas = (nombre_int, apep_int, apem_int, sexo_int, estado_int, alias_int, curp_int, 
-                        udc_int, utc_int, face_int, asociado_int, antece_int, typeImage, nameImage, dataImage) => {
+                        udc_int, utc_int, face_int, asociado_int, antece_int,categoria_int, typeImage, nameImage, dataImage) => {
     return {
         ['row']: {
             nombre_int: nombre_int,
@@ -164,6 +165,7 @@ const dataImageSenas = (nombre_int, apep_int, apem_int, sexo_int, estado_int, al
             face_int: face_int,
             asociado_int: asociado_int,
             antece_int:  antece_int,
+            categoria_int:  categoria_int,
             typeImage: typeImage,
             nameImage: nameImage,
             image: dataImage
@@ -171,7 +173,6 @@ const dataImageSenas = (nombre_int, apep_int, apem_int, sexo_int, estado_int, al
     }
     
 }
-
 const validateImages = async({integrantes}) => {
     let band = true;
 
