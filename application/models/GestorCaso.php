@@ -244,11 +244,8 @@ class GestorCaso
                                                     UDC LIKE '%" . $cadena . "%' OR 
                                                     UTC LIKE '%" . $cadena . "%' OR 
                                                     ALIAS LIKE '%" . $cadena . "%' OR 
-                                                    PERFIL_FACEBOOK LIKE '%" . $cadena . "%' OR 
-                                                    OTROS_DOMICILIOS LIKE '%" . $cadena . "%' OR 
-                                                    REGISTRO_VEHICULOS LIKE '%" . $cadena . "%' OR 
-                                                    ASOCIACION_VEHICULOS LIKE '%" . $cadena . "%' OR 
-                                                    ANTECEDENTES_PERSONA LIKE '%" . $cadena . "%' OR
+                                                    DESCRIPCION LIKE '%" . $cadena . "%' OR 
+                                                    ANTECEDENTES_PERSONA LIKE '%" . $cadena . "%' OR 
                                                     ESTATUS LIKE '%" . $cadena . "%' OR 
                                                     NOMBRE_BANDA LIKE '%" . $cadena . "%' ) 
                                                     ";
@@ -259,17 +256,12 @@ class GestorCaso
 
                                         WHERE  (    ID_BANDA LIKE '%" . $cadena . "%' OR 
                                                     NOMBRE_BANDA LIKE '%" . $cadena . "%' OR 
-                                                    DELITO_BANDA_GENERAL LIKE '%" . $cadena . "%' OR 
-                                                    DELITOS_ASOCIADOS LIKE '%" . $cadena . "%' OR 
-                                                    MODUS_OPERANDI LIKE '%" . $cadena . "%' OR 
+                                                    PRINCIPALES_DELITOS LIKE '%" . $cadena . "%' OR 
+                                                    ACTIVIDADES_ILEGALES LIKE '%" . $cadena . "%' OR 
                                                     PELIGROSIDAD LIKE '%" . $cadena . "%' OR 
                                                     ZONAS LIKE '%" . $cadena . "%' OR 
                                                     COLONIAS LIKE '%" . $cadena . "%' OR 
-                                                    EVENTOS_ASOCIADOS LIKE '%" . $cadena . "%' OR 
-                                                    EVENTOS_CONFIRMADOS LIKE '%" . $cadena . "%' OR 
-                                                    EVENTOS_CDI LIKE '%" . $cadena . "%' OR 
-                                                    ANTECEDENTES_BANDA LIKE '%" . $cadena . "%' OR 
-                                                    ORIGEN LIKE '%" . $cadena . "%') 
+                                                    ANTECEDENTES LIKE '%" . $cadena . "%') 
                                             ";
                 break;
         }
@@ -324,6 +316,32 @@ class GestorCaso
         }
 
         return $cad_fechas;
+    }
+    public function obtenerTodo(){
+        
+        try {
+            $this->db->beginTransaction();
+            $sql = "SELECT ID_BANDA from atlas_grupos";
+            $this->db->query($sql);
+            $todos = $this->db->registers();
+            $grupos=[];
+            for($i=0;$i<count($todos);$i++){
+                $sql = "SELECT * FROM atlas_grupos WHERE ID_BANDA =" . $todos[$i]->ID_BANDA;
+                $this->db->query($sql);
+                $data['grupo'] = $this->db->register();
+                $sql = "SELECT * FROM atlas_personas WHERE ID_BANDA =" . $todos[$i]->ID_BANDA;
+                $this->db->query($sql);
+                $data['integrantes'] = $this->db->registers();
+                array_push($grupos,$data);
+            }
+            $this->db->commit();
+        } catch (Exception $e) {
+            echo $e;
+            $this->db->rollBack();
+        }
+
+        return $grupos;
+            
     }
     
 }

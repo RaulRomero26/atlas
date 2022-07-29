@@ -10,8 +10,10 @@
     //libreria MPDF
     require_once(BASE_PATH.'public/vendor/autoload.php');
     require_once('libraries/MY_PDF.php');
-
+    /*Se añade esta nueva libreria para usar los PDF de vehiculo*/
+    require_once(BASE_PATH.'public/vendor/setasign/fpdi/src/autoload.php');
+    /* Se comenta para que pueda funcioanr el PDF de vehiculos
     spl_autoload_register(function($nameClass){
         require_once 'libraries/' . '$nameClass' . '.php';
-    });
+    });*/
 ?>

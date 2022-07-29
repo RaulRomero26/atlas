@@ -11,7 +11,7 @@ class GestorCasos extends Controller
     public function __construct(){
        
         $this->GestorCaso = $this->model('GestorCaso');
-        $this->numColumnsGC = [14, 7, 6];  //se inicializa el número de columns por cada filtro
+        $this->numColumnsGC = [11, 8];  //se inicializa el número de columns por cada filtro
         $this->FV = new FormValidator();
     }
 
@@ -381,30 +381,24 @@ class GestorCasos extends Controller
                         <th class="column5">UDC</th>
                         <th class="column6">UTC</th>
                         <th class="column7">ALIAS</th>
-                        <th class="column8">PERFIL FACEBOOK</th>
-                        <th class="column9">OTROS DOMICILIOS</th>
-                        <th class="column10">REGISTRO VEHICULOS</th>
-                        <th class="column11">ASOCIACION VEHICULOS</th>
-                        <th class="column12">ANTECEDENTES PERSONA</th>
-                        <th class="column13">ESTATUS</th>
-                        <th class="column14">NOMBRE BANDA</th>
+                        <th class="column8">DESCRIPCION</th>
+                        <th class="column9">ANTECEDENTES PERSONA</th>
+                        <th class="column10">ESTATUS</th>
+                        <th class="column11">NOMBRE BANDA</th>
                     ';
                 foreach ($rows as $row) {
                     $infoTable['body'] .= '<tr id="tr' . $row->ID_PERSONA . '">';
                     $infoTable['body'] .= '  <td class="column1">' . $row->ID_PERSONA . '</td>
-                                            <td class="column2">' . mb_strtoupper($row->NOMBRE_COMPLETO) . '</td>
-                                            <td class="column3">' . mb_strtoupper($row->SEXO) . '</td>
+                                            <td class="column2">' . $row->NOMBRE_COMPLETO . '</td>
+                                            <td class="column3">' . $row->SEXO . '</td>
                                             <td class="column4">' . mb_strtoupper($row->CURP) . '</td>
-                                            <td class="column5">' . mb_strtoupper($row->UDC) . '</td>
-                                            <td class="column6">' . mb_strtoupper($row->UTC) . '</td>
-                                            <td class="column7">' . mb_strtoupper($row->ALIAS) . '</td>
-                                            <td class="column8">' . mb_strtoupper($row->PERFIL_FACEBOOK) . '</td>
-                                            <td class="column9">' . mb_strtoupper($row->OTROS_DOMICILIOS) . '</td>
-                                            <td class="column10">' . mb_strtoupper($row->REGISTRO_VEHICULOS) . '</td>
-                                            <td class="column11">' . mb_strtoupper($row->ASOCIACION_VEHICULOS) . '</td>
-                                            <td class="column12">' . mb_strtoupper($row->ANTECEDENTES_PERSONA) . '</td>
-                                            <td class="column13">' . mb_strtoupper($row->ESTATUS) . '</td>
-                                            <td class="column14">' . mb_strtoupper($row->NOMBRE_BANDA) . '</td>
+                                            <td class="column5">' . $row->UDC . '</td>
+                                            <td class="column6">' . $row->UTC . '</td>
+                                            <td class="column7">' . $row->ALIAS . '</td>
+                                            <td class="column8">' . $row->DESCRIPCION . '</td>
+                                            <td class="column9">' . $row->ANTECEDENTES_PERSONA . '</td>
+                                            <td class="column10">' . $row->ESTATUS . '</td>
+                                            <td class="column11">' . $row->NOMBRE_BANDA . '</td>
 
                         ';
                     //se comprueba si el registro ya tiene un dictamen previamente llenado o si no existe genera un link para nuevo
@@ -418,9 +412,6 @@ class GestorCasos extends Controller
                             $infoTable['body'] .= '<td class="d-flex">';
                         }
                         $infoTable['body'] .= '
-                                                <a class="myLinks mt-3' . $permisos_Ver . '" data-toggle="tooltip" data-placement="right" title="Ver registro" href="' . base_url . 'GestorCasos/verCaso/?no_grupo=' . $row->ID_BANDA . '">
-                                                    <i class="material-icons">visibility</i>
-                                                </a>
                                                 <a class="myLinks mt-3' . $permisos_FormatoFicha . '" data-toggle="tooltip" data-placement="right" title="Generar ficha" href="' . base_url . 'GestorCasos/generarFicha/?no_grupo=' . $row->ID_BANDA . '" target="_blank">
                                                     <i class="material-icons">file_present</i>
                                                 </a>
@@ -436,33 +427,23 @@ class GestorCasos extends Controller
                 $infoTable['header'] .= '
                         <th class="column1">ID BANDA</th>
                         <th class="column2">NOMBRE BANDA</th>
-                        <th class="column3">DELITO BANDA GENERAL</th>
-                        <th class="column4">DELITOS ASOCIADOS</th>
-                        <th class="column5">MODUS OPERANDI</th>
-                        <th class="column6">PELIGROSIDAD</th>
-                        <th class="column7">ZONAS</th>
-                        <th class="column8">COLONIAS</th>
-                        <th class="column9">EVENTOS ASOCIADOS</th>
-                        <th class="column10">EVENTOS CONFIRMADOS</th>
-                        <th class="column11">EVENTOS CDI</th>
-                        <th class="column12">ANTECEDENTES BANDA</th>
-                        <th class="column13">ORIGEN</th>
+                        <th class="column3">PRINCIPALES DELITOS</th>
+                        <th class="column4">ACTIVIDADES ILEGALES</th>
+                        <th class="column5">PELIGROSIDAD</th>
+                        <th class="column6">ZONAS</th>
+                        <th class="column7">COLONIAS</th>
+                        <th class="column8">ANTECEDENTES</th>
                     ';
                 foreach ($rows as $row) {
                     $infoTable['body'] .= '<tr id="tr' . $row->ID_BANDA . '">';
                     $infoTable['body'] .= '  <td class="column1">' . $row->ID_BANDA . '</td>
-                                            <td class="column2">' . mb_strtoupper($row->NOMBRE_BANDA) . '</td>
-                                            <td class="column3">' . mb_strtoupper($row->DELITO_BANDA_GENERAL) . '</td>
-                                            <td class="column4">' . mb_strtoupper($row->DELITOS_ASOCIADOS) . '</td>
-                                            <td class="column5">' . mb_strtoupper($row->MODUS_OPERANDI) . '</td>
-                                            <td class="column6">' . mb_strtoupper($row->PELIGROSIDAD) . '</td>
-                                            <td class="column7">' . mb_strtoupper($row->ZONAS) . '</td>
-                                            <td class="column8">' . mb_strtoupper($row->COLONIAS) . '</td>
-                                            <td class="column9">' . mb_strtoupper($row->EVENTOS_ASOCIADOS) . '</td>
-                                            <td class="column10">' . mb_strtoupper($row->EVENTOS_CONFIRMADOS) . '</td>
-                                            <td class="column11">' . mb_strtoupper($row->EVENTOS_CDI) . '</td>
-                                            <td class="column12">' . mb_strtoupper($row->ANTECEDENTES_BANDA) . '</td>
-                                            <td class="column13">' . mb_strtoupper($row->ORIGEN) . '</td>
+                                            <td class="column2">' . $row->NOMBRE_BANDA . '</td>
+                                            <td class="column3">' . $row->PRINCIPALES_DELITOS . '</td>
+                                            <td class="column4">' . $row->ACTIVIDADES_ILEGALES . '</td>
+                                            <td class="column5">' . $row->PELIGROSIDAD . '</td>
+                                            <td class="column6">' . $row->ZONAS . '</td>
+                                            <td class="column7">' . $row->COLONIAS . '</td>
+                                            <td class="column8">' . $row->ANTECEDENTES . '</td>
 
                         ';
                     //se comprueba si el registro ya tiene un dictamen previamente llenado o si no existe genera un link para nuevo
@@ -476,67 +457,11 @@ class GestorCasos extends Controller
                             $infoTable['body'] .= '<td class="d-flex">';
                         }
                         $infoTable['body'] .= '
-                                                <a class="myLinks mt-3' . $permisos_Ver . '" data-toggle="tooltip" data-placement="right" title="Ver registro" href="' . base_url . 'GestorCasos/verRemision/?no_grupo=' . $row->ID_BANDA .  '">
-                                                    <i class="material-icons">visibility</i>
-                                                </a>
                                                 <a class="myLinks mt-3' . $permisos_FormatoFicha . '" data-toggle="tooltip" data-placement="right" title="Generar ficha" href="' . base_url . 'GestorCasos/generarFicha/?no_grupo=' . $row->ID_BANDA . '" target="_blank">
                                                     <i class="material-icons">file_present</i>
                                                 </a>
                                             </td>';
                     
-
-
-                    $infoTable['body'] .= '</tr>';
-                }
-                break;
-            case '3': //elementos participantes
-                $infoTable['header'] .= '
-                        <th class="column1">Ficha</th>
-                        <th class="column2">Núm. Remisión</th>
-                        <th class="column3">Fecha y Hora</th>
-                        <th class="column4">Detenido</th>
-                        <th class="column5">Elemento</th>
-                        <th class="column6">Cargo</th>
-                        <th class="column7">Placa</th>
-                        <th class="column8">Unidad</th>
-                        <th class="column9">Llamado</th>
-                    ';
-                foreach ($rows as $row) {
-                    $auxllamado = ($row->Tipo_Llamado == '0') ? "En apoyo" : "Primer respondiente";
-                    $infoTable['body'] .= '<tr id="tr' . $row->No_Remision . '">';
-                    $infoTable['body'] .= '  <td class="column1">' . $row->Ficha . '</td>
-                                            <td class="column2">' . $row->No_Remision . '</td>
-                                            <td class="column3">' . $row->Fecha_Hora . '</td>
-                                            <td class="column4">' . mb_strtoupper($row->Nombre_Detenido) . '</td>
-                                            <td class="column5">' . mb_strtoupper($row->Nombre_Elemento) . '</td>
-                                            <td class="column6">' . mb_strtoupper($row->Cargo) . '</td>
-                                            <td class="column7">' . mb_strtoupper($row->Placa) . '</td>
-                                            <td class="column8">' . mb_strtoupper($row->No_Unidad) . '</td>
-                                            <td class="column9">' . $auxllamado . '</td>
-
-                        ';
-                    //se comprueba si el registro ya tiene un dictamen previamente llenado o si no existe genera un link para nuevo
-                    if ($row->Fecha_Hora != '') {
-                        if ($row->Validacion_Tab_Bit != '11111111111' || $_SESSION['userdata']->Modo_Admin == '1' || $_SESSION['userdata']->Nivel_User == '1') { //validacion de tabs validados completaente y/o permisos de validacion o modo admin
-                            $infoTable['body'] .= '<td class="d-flex">
-                                                    <a class="myLinks mb-3' . $permisos_Editar . '" data-toggle="tooltip" data-placement="right" title="Editar registro" href="' . base_url . 'GestorCasos/editarRemision/?no_remision=' . $row->No_Remision . '&no_ficha=' . $row->Ficha . '">
-                                                        <i class="material-icons">edit</i>
-                                                    </a>';
-                        } else {
-                            $infoTable['body'] .= '<td class="d-flex">';
-                        }
-                        $infoTable['body'] .= '
-                                                <a class="myLinks mt-3' . $permisos_Ver . '" data-toggle="tooltip" data-placement="right" title="Ver registro" href="' . base_url . 'GestorCasos/verRemision/?no_ficha=' . $row->Ficha . '&no_remision=' . $row->No_Remision . '">
-                                                    <i class="material-icons">visibility</i>
-                                                </a>
-                                                <a class="myLinks mt-3' . $permisos_FormatoFicha . '" data-toggle="tooltip" data-placement="right" title="Generar formato remisión" href="' . base_url . 'GestorCasos/generarIPH1/?no_ficha=' . $row->Ficha . '&no_remision=' . $row->No_Remision . '" target="_blank">
-                                                    <i class="material-icons">list_alt</i>
-                                                </a>
-                                                <a class="myLinks mt-3' . $permisos_FormatoFicha . '" data-toggle="tooltip" data-placement="right" title="Generar ficha" href="' . base_url . 'GestorCasos/generarFicha/?no_ficha=' . $row->Ficha . '&no_remision=' . $row->No_Remision . '" target="_blank">
-                                                    <i class="material-icons">file_present</i>
-                                                </a>
-                                            </td>';
-                    }
 
 
                     $infoTable['body'] .= '</tr>';
@@ -559,13 +484,10 @@ class GestorCasos extends Controller
         //generación de dropdown dependiendo del filtro
         switch ($filtro) {
             case '1':
-                $campos = ['ID PERSONA', 'NOMBRE', 'SEXO', 'CURP', 'UDC', 'UTC', 'ALIAS', 'PERFIL FACEBOOK', 'OTROS DOMICILIOS', 'REGISTRO VEHICULOS', 'ASOCIACION VEHICULOS', 'ANTECEDENTES PERSONA', 'ESTATUS', 'NOMBRE BANDA'];
+                $campos = ['ID PERSONA', 'NOMBRE', 'SEXO', 'CURP', 'UDC', 'UTC', 'ALIAS', 'DESCRIPCION','ANTECEDENTES_PERSONAS', 'ESTATUS', 'NOMBRE BANDA'];
                 break;
             case '2':
-                $campos = ['ID BANDA', 'NOMBRE BANDA', 'DELITO BANDA GENERAL', 'DELITOS ASOCIADOS', 'Instancia', 'Folio 911'];
-                break;
-            case '3':
-                $campos = ['Ficha', 'Núm. Remisión', 'Fecha y Hora', 'Detenido', 'Elemento', 'Cargo', 'Placa', 'Unidad', 'Llamado'];
+                $campos = ['ID BANDA', 'NOMBRE BANDA', 'PRINCIPALES DELITOS', 'ACTIVIDADES','ZONAS','COLONIAS' ,'ANTECEDENTES'];
                 break;
         }
         //gestión de cada columna
@@ -668,6 +590,17 @@ class GestorCasos extends Controller
             file_put_contents($ruta, $image_base64);
 
             return true;
+    }
+    public function generarFicha()
+    {
+        //comprobar los permisos para dejar pasar al módulo
+        if (!isset($_SESSION['userdata']) || ($_SESSION['userdata']->Modo_Admin != 1)) {
+            header("Location: " . base_url . "Inicio");
+            exit();
+        }
+        $data = $this->GestorCaso->obtenerTodo();
+        
+        $this->view('system/gestorCasos/atlaspdf', $data);
     }
 }
 ?>

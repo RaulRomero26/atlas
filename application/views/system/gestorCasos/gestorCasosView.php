@@ -25,8 +25,7 @@
             <div class="dropdown-menu" aria-labelledby="id_filtros">
                 
                 <a class="dropdown-item <?= ($data['filtroActual']==1)?'active':'';?>" href="<?= base_url;?>GestorCasos/index/?filtro=1">Vista general</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==3)?'active':'';?>" href="<?= base_url;?>GestorCasos/index/?filtro=2">Por Grupos Delictivos</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==4)?'active':'';?>" href="<?= base_url;?>GestorCasos/index/?filtro=3">Por actividad Delictiva</a>
+                <a class="dropdown-item <?= ($data['filtroActual']==2)?'active':'';?>" href="<?= base_url;?>GestorCasos/index/?filtro=2">Por Grupos Delictivos</a>
             </div>
         </div>
         <div class="col-6 col-lg-auto mr-lg-auto my-2 my-lg-auto  d-flex justify-content-center">

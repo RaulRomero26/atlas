@@ -7,8 +7,8 @@ class Inicio extends Controller
 
     public function __construct()
     {
-        $this->Catalogo = $this->model('Catalogo');
-        $this->Remision = $this->model('Remision');
+       
+        
     }
 
     public function index()

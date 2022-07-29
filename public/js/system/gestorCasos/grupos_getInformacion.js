@@ -14,20 +14,16 @@ window.onload = function() {
         console.log(data)
         //document.getElementById('no_grupo').value=
         console.log("banda",data['grupo']['ID_BANDA'])
-        document.getElementById('principal_actividad').value=data['grupo']['DELITO_BANDA_GENERAL']
+        document.getElementById('principal_actividad').value=data['grupo']['PRINCIPALES_DELITOS']
         document.getElementById('nombre_grupo').value=data['grupo']['NOMBRE_BANDA']
-        document.getElementById('delitos_asociados').value=data['grupo']['DELITOS_ASOCIADOS']
-        document.getElementById('modus_operandi').value=data['grupo']['MODUS_OPERANDI']
+        document.getElementById('delitos_asociados').value=data['grupo']['ACTIVIDADES_ILEGALES']
         document.getElementById('peligrosidad').value=data['grupo']['PELIGROSIDAD']
-        document.getElementById('ev_asociados').value=data['grupo']['EVENTOS_ASOCIADOS']
-        document.getElementById('ev_confirmados').value=data['grupo']['EVENTOS_CONFIRMADOS']
-        document.getElementById('ev_cdi').value=data['grupo']['EVENTOS_CDI']
-        document.getElementById('antecedentes').value=data['grupo']['ANTECEDENTES_BANDA']
-        document.getElementById('origen').value=data['grupo']['ORIGEN']
+        document.getElementById('antecedentes').value=data['grupo']['ANTECEDENTES']
 
         pathImagesFotos = `${base_url_js}public/files/GestorCasos/${data['grupo']['ID_BANDA']}/Grupo/`
         
         const rowsTableIntegrantes = data.integrantes;
+        console.log(rowsTableIntegrantes)
         for (let i = 0; i < rowsTableIntegrantes.length; i++) {
     
             let formData = {
@@ -41,9 +37,7 @@ window.onload = function() {
                 udc_int: rowsTableIntegrantes[i].UDC,
                 utc_int: rowsTableIntegrantes[i].UTC,
                 face_int: rowsTableIntegrantes[i].PERFIL_FACEBOOK,
-                otros_dom_int: rowsTableIntegrantes[i].OTROS_DOMICILIOS,
-                vehi_int: rowsTableIntegrantes[i].REGISTRO_VEHICULOS,
-                asociado_int: rowsTableIntegrantes[i].ASOCIACION_VEHICULOS,
+                asociado_int: rowsTableIntegrantes[i].DESCRIPCION,
                 antece_int: rowsTableIntegrantes[i].ANTECEDENTES_PERSONA,
             }
             insertNewRowIntegrante(formData);
