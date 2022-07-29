@@ -108,19 +108,15 @@ class GestorCaso
             $this->db->beginTransaction();  //inicia la transaction
             $id_grupo = $post['no_grupo'];
             $data['grupo'] = $id_grupo;
+            $repla=['"','\''];
             $sql = "UPDATE atlas_grupos 
-                SET NOMBRE_BANDA      = '" . trim($post['nombre_grupo']) . "',
-                    DELITO_BANDA_GENERAL     = '" . trim($post['principal_actividad']) . "',
-                    DELITOS_ASOCIADOS      = '" . trim($post['delitos_asociados']) . "',
-                    MODUS_OPERANDI      = '" . trim($post['modus_operandi']) . "',
+                SET NOMBRE_BANDA      = '" . mb_strtoupper(trim($post['nombre_grupo'])) . "',
+                    PRINCIPALES_DELITOS     = '" . trim($post['principal_actividad']) . "',
+                    ACTIVIDADES_ILEGALES      = '" . trim($post['delitos_asociados']) . "',
                     PELIGROSIDAD         = '" . trim($post['peligrosidad']) . "',
                     ZONAS         = '" . trim($post['zonas_final']) . "',
                     COLONIAS   = '" . trim($post['colonias_final']) . "',
-                    EVENTOS_CONFIRMADOS     = '" . trim($post['ev_asociados']) . "',
-                    EVENTOS_CONFIRMADOS   = '" . trim($post['ev_confirmados']) . "',
-                    EVENTOS_CDI          = '" . trim($post['ev_cdi']) . "',
-                    ANTECEDENTES_BANDA           = '" . trim($post['antecedentes']) . "',
-                    ORIGEN    = '" . trim($post['origen']) . "'
+                    ANTECEDENTES           = '" . str_replace($repla, '`',$post['antecedentes']) . "'
                     WHERE ID_BANDA = '" . $id_grupo . "'";
                 $this->db->query($sql);
                 $this->db->execute();
@@ -153,9 +149,7 @@ class GestorCaso
                                 UTC,
                                 ALIAS,
                                 PERFIL_FACEBOOK,
-                                OTROS_DOMICILIOS,
-                                REGISTRO_VEHICULOS,
-                                ASOCIACION_VEHICULOS,
+                                DESCRIPCION,
                                 ANTECEDENTES_PERSONA,
                                 ESTATUS,
                                 PATH_IMAGEN
@@ -166,13 +160,11 @@ class GestorCaso
                                 '" . trim($integrante->row->apep_int) . "',
                                 '" . trim($integrante->row->apem_int) . "',
                                 '" . trim($integrante->row->sexo_int) . "',
-                                '" . trim($integrante->row->curp_int) . "',
+                                '" . mb_strtoupper(trim($integrante->row->curp_int)) . "',
                                 '" . trim($integrante->row->udc_int) . "',
                                 '" . trim($integrante->row->utc_int) . "',
                                 '" . trim($integrante->row->alias_int) . "',
                                 '" . trim($integrante->row->face_int) . "',
-                                '" . trim($integrante->row->otros_dom_int) . "',
-                                '" . trim($integrante->row->vehi_int) . "',
                                 '" . trim($integrante->row->asociado_int) . "',
                                 '" . trim($integrante->row->antece_int) . "',
                                 '" . trim($integrante->row->estado_int) . "',
