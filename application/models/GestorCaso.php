@@ -17,31 +17,21 @@ class GestorCaso
                 $sql = "INSERT
                         INTO atlas_grupos(
                             NOMBRE_BANDA,
-                            DELITO_BANDA_GENERAL,
-                            DELITOS_ASOCIADOS,
-                            MODUS_OPERANDI,
+                            ANTECEDENTES,
+                            PRINCIPALES_DELITOS,
                             PELIGROSIDAD,
                             ZONAS,
                             COLONIAS,
-                            EVENTOS_ASOCIADOS,
-                            EVENTOS_CONFIRMADOS,
-                            EVENTOS_CDI,
-                            ANTECEDENTES_BANDA,
-                            ORIGEN
+                            ACTIVIDADES_ILEGALES
                         )
                         VALUES(
                             '".$post['nombre_grupo']."',
+                            '".$post['antecedentes']."',
                             '".$post['principal_actividad']."',
-                            '".$post['delitos_asociados']."',
-                            '".$post['modus_operandi']."',
                             '".$post['peligrosidad']."',
                             '".$post['zonas_final']."',
                             '".$post['colonias_final']."',
-                            '".$post['ev_asociados']."',
-                            '".$post['ev_confirmados']."',
-                            '".$post['ev_cdi']."',
-                            '".$post['antecedentes']."',
-                            '".$post['origen']."'
+                            '".$post['delitos_asociados']."'
                         )
                 ";
                 $this->db->query($sql);
@@ -76,10 +66,8 @@ class GestorCaso
                                 UTC,
                                 ALIAS,
                                 PERFIL_FACEBOOK,
-                                OTROS_DOMICILIOS,
-                                REGISTRO_VEHICULOS,
-                                ASOCIACION_VEHICULOS,
                                 ANTECEDENTES_PERSONA,
+                                DESCRIPCION,
                                 ESTATUS,
                                 PATH_IMAGEN
                             )
@@ -94,10 +82,8 @@ class GestorCaso
                                 '" . trim($integrante->row->utc_int) . "',
                                 '" . trim($integrante->row->alias_int) . "',
                                 '" . trim($integrante->row->face_int) . "',
-                                '" . trim($integrante->row->otros_dom_int) . "',
-                                '" . trim($integrante->row->vehi_int) . "',
-                                '" . trim($integrante->row->asociado_int) . "',
                                 '" . trim($integrante->row->antece_int) . "',
+                                '" . trim($integrante->row->asociado_int) . "',
                                 '" . trim($integrante->row->estado_int) . "',
                                 '" . trim($name) . "'
                             )
