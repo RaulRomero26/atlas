@@ -46,14 +46,11 @@ window.onload = function() {
             srcImage = rowsTableIntegrantes[i].PATH_IMAGEN
             console.log(srcImage);
             srcImage = srcImage.split('?')
+            console.log(srcImage);
 
-            if (rowsTableIntegrantes[i].PATH_IMAGEN.length != 0) {
+            if (rowsTableIntegrantes[i].PATH_IMAGEN.length != 0 && srcImage[0] != '.png') {
                 createElementFoto(pathImagesFotos + srcImage[0], i + 1, 'Photo');
             }else{
-                createElementFoto(pathPlaceholder, i + 1, 'Photo')
-            }
-            
-            if(srcImage == '' || srcImage == null){
                 createElementFoto(pathPlaceholder, i + 1, 'Photo')
             }
 
