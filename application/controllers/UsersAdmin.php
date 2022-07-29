@@ -30,7 +30,7 @@ class UsersAdmin extends Controller
 
         //PROCESO DE FILTRADO DE EVENTOS DELICTIVOS
 
-        if (isset($_GET['filtro']) && is_numeric($_GET['filtro']) && $_GET['filtro']>=MIN_FILTRO_DM && $_GET['filtro']<=MAX_FILTRO_DM) { //numero de catálogo
+        if (isset($_GET['filtro']) && is_numeric($_GET['filtro']) && $_GET['filtro']>=MIN_FILTRO_GC && $_GET['filtro']<=MAX_FILTRO_GC) { //numero de catálogo
             $filtro = $_GET['filtro'];
         } 
         else {
@@ -721,7 +721,7 @@ class UsersAdmin extends Controller
             exit();
         }
         //se recupera el catalogo actual para poder consultar conforme al mismo
-        if (!isset($_REQUEST['filtroActual']) || !is_numeric($_REQUEST['filtroActual']) || !($_REQUEST['filtroActual']>=MIN_FILTRO_DM) || !($_REQUEST['filtroActual']<=MAX_FILTRO_DM)) 
+        if (!isset($_REQUEST['filtroActual']) || !is_numeric($_REQUEST['filtroActual']) || !($_REQUEST['filtroActual']>=MIN_FILTRO_GC) || !($_REQUEST['filtroActual']<=MAX_FILTRO_GC)) 
                 $filtroActual = 1;
             else
                 $filtroActual = $_REQUEST['filtroActual'];
@@ -949,7 +949,7 @@ class UsersAdmin extends Controller
     //función para checar los cambios de filtro y poder asignar los valores correspondientes de las columnas a la session
     public function setColumnsSession($filtroActual=1){
         //si el filtro existe y esta dentro de los parámetros continua
-        if (isset($_SESSION['userdata']->filtro_USER) && $_SESSION['userdata']->filtro_USER >= MIN_FILTRO_DM && $_SESSION['userdata']->filtro_USER<=MAX_FILTRO_DM ) {
+        if (isset($_SESSION['userdata']->filtro_USER) && $_SESSION['userdata']->filtro_USER >= MIN_FILTRO_GC && $_SESSION['userdata']->filtro_USER<=MAX_FILTRO_GC ) {
             //si cambia el filtro se procde a cambiar los valores de las columnas que contiene el filtro seleccionado
             if ($_SESSION['userdata']->filtro_USER != $filtroActual) {
                 $_SESSION['userdata']->filtro_USER = $filtroActual;

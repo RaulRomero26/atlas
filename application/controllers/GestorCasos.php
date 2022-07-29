@@ -403,7 +403,7 @@ class GestorCasos extends Controller
                         ';
                     //se comprueba si el registro ya tiene un dictamen previamente llenado o si no existe genera un link para nuevo
                     
-                        if ($_SESSION['userdata']->Modo_Admin == '1' || $_SESSION['userdata']->Nivel_User == '1') { //validacion de tabs validados completaente y/o permisos de validacion o modo admin
+                        if ($_SESSION['userdata']->Modo_Admin == '1' || $_SESSION['userdata']->Seguimientos[1]=='1') { //validacion de tabs validados completaente y/o permisos de validacion o modo admin
                             $infoTable['body'] .= '<td class="d-flex">
                                                     <a class="myLinks mb-3' . $permisos_Editar . '" data-toggle="tooltip" data-placement="right" title="Editar registro" href="' . base_url . 'GestorCasos/editarGrupo/?no_grupo=' . $row->ID_BANDA . '">
                                                         <i class="material-icons">edit</i>
@@ -448,7 +448,7 @@ class GestorCasos extends Controller
                         ';
                     //se comprueba si el registro ya tiene un dictamen previamente llenado o si no existe genera un link para nuevo
                     
-                        if ($_SESSION['userdata']->Modo_Admin == '1' || $_SESSION['userdata']->Nivel_User == '1') { //validacion de tabs validados completaente y/o permisos de validacion o modo admin
+                        if ($_SESSION['userdata']->Modo_Admin == '1' || $_SESSION['userdata']->Seguimientos[1]=='1') { //validacion de tabs validados completaente y/o permisos de validacion o modo admin
                             $infoTable['body'] .= '<td class="d-flex">
                                                     <a class="myLinks mb-3' . $permisos_Editar . '" data-toggle="tooltip" data-placement="right" title="Editar registro" href="' . base_url . 'GestorCasos/editarGrupo/?no_grupo=' . $row->ID_BANDA . '">
                                                         <i class="material-icons">edit</i>
@@ -601,6 +601,34 @@ class GestorCasos extends Controller
         $data = $this->GestorCaso->obtenerTodo();
         
         $this->view('system/gestorCasos/atlaspdf', $data);
+    }
+    
+    //función fetch para buscar por la cadena introducida dependiendo del filtro
+    public function buscarPorCadena()
+    {
+        /*Aquí van condiciones de permisos*/
+
+        if (isset($_POST['cadena'])) {
+            $cadena = trim($_POST['cadena']);
+            $filtroActual = trim($_POST['filtroActual']);
+
+            $results = $this->GestorCaso->getRemisionDByCadena($cadena, $filtroActual);
+            $extra_cad = ($cadena != "") ? ("&cadena=" . $cadena) : ""; //para links conforme a búsqueda
+
+            //$dataReturn = "jeje";
+
+            $dataReturn['infoTable'] = $this->generarInfoTable($results['rows_Rems'], $filtroActual);
+            $dataReturn['links'] = $this->generarLinks($results['numPage'], $results['total_pages'], $extra_cad, $filtroActual);
+        //    $dataReturn['export_links'] = $this->generarExportLinks($extra_cad, $filtroActual);
+            $dataReturn['total_rows'] = "Total registros: " . $results['total_rows'];
+            $dataReturn['dropdownColumns'] = $this->generateDropdownColumns($filtroActual);
+
+
+            echo json_encode($dataReturn);
+        } else {
+            header("Location: " . base_url . "Inicio");
+            exit();
+        }
     }
 }
 ?>

@@ -326,5 +326,27 @@ class GestorCaso
         return $grupos;
             
     }
+    public function getRemisionDByCadena($cadena, $filtro = '1')
+    {
+        //CONSULTA COINCIDENCIAS DE CADENA PARA EVENTOS DELICTIVOS
+        if (!is_numeric($filtro) || !($filtro >= MIN_FILTRO_GC) || !($filtro <= MAX_FILTRO_GC))
+            $filtro = 1;
+
+        //sentencia from_where para hacer la busqueda por la cadena ingresada
+        $from_where_sentence = $this->generateFromWhereSentence($cadena, $filtro);
+        $numPage = 1;
+        $no_of_records_per_page = NUM_MAX_REG_PAGE; //total de registros por pagination
+        $offset = ($numPage - 1) * $no_of_records_per_page; // desplazamiento conforme a la pagina
+
+        $results = $this->getTotalPages($no_of_records_per_page, $from_where_sentence);  //total de páginas conforme a la busqueda
+        //info de retorno para la creacion de los links conforme a la cadena ingresada
+        $data['rows_Rems'] = $this->getDataCurrentPage($offset, $no_of_records_per_page, $from_where_sentence);   //se obtiene la información de la página actual
+        $data['numPage'] = $numPage; //numero pag actual para la pagination footer
+        $data['total_pages'] = $results['total_pages']; //total pages para la pagination
+        $data['total_rows'] = $results['total_rows'];   //total de registro hallados
+
+        return $data;
+    }
+
     
 }
