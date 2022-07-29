@@ -13,7 +13,7 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
     $pdf->addPage();
     $pdf->useImportedPage($pageId, 1, 1,207,295);
     $pdf->SetFont('helvetica','',30);
-    $pdf->SetTextColor(0, 0, 128);
+    $pdf->SetTextColor(31, 56, 100);
     $pdf->SetY(45);
     $pdf->SetX(16);
     $pdf->Cell(5,4,utf8_decode("\"".$data[$cantidad_grupo]['grupo']->NOMBRE_BANDA."\""));
@@ -23,7 +23,7 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
     $pdf->SetX(77);
     $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['grupo']->PRINCIPALES_DELITOS));
     $pdf->SetFont('helvetica','',11);
-    $pdf->SetTextColor(0, 0, 128);
+    $pdf->SetTextColor(31, 56, 100);
     $pdf->SetY(75);
     $pdf->SetX(20);
     $pdf->Multicell(75,4,utf8_decode($data[$cantidad_grupo]['grupo']->ANTECEDENTES));
@@ -95,19 +95,20 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
     $pdf->SetX(100);
     $pdf->Multicell(90,4,utf8_decode($data[$cantidad_grupo]['grupo']->ACTIVIDADES_ILEGALES));
     $total=count($data[$cantidad_grupo]['integrantes']);
+    $repla=['"','\'','\"','“','”'];
     for($contador_integrantes=0;$contador_integrantes<count($data[$cantidad_grupo]['integrantes']);$contador_integrantes++){  
         if($contador_integrantes%2==0){
             if($contador_integrantes==$total-1){
                 $pdf->addPage();
                 $pdf->useImportedPage($pageId3, 1, 1,207,295);
                 $pdf->SetFont('helvetica','',11);
-                $pdf->SetTextColor(0, 0, 0);
+                $pdf->SetTextColor(31, 56, 100);
             }
             else{
                 $pdf->addPage();
                 $pdf->useImportedPage($pageId2, 1, 1,207,295);
                 $pdf->SetFont('helvetica','',11);
-                $pdf->SetTextColor(0, 0, 0);
+                $pdf->SetTextColor(31, 56, 100);
             }
         }
        
@@ -173,7 +174,10 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             $pdf->SetFont('helvetica','',11);
             $pdf->SetY(145);
             $pdf->SetX(20);
-            $pdf->Multicell(80,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION));
+           
+          //  echo (str_replace($repla, '`',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION));
+            
+            $pdf->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION)));
             $pdf->SetY($pdf->GetY()+7);
             $pdf->SetX(20);
             $pdf->Cell(4,4,utf8_decode("Cuenta con antecedentes policiales por: "));
@@ -250,7 +254,7 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             $pdf->SetFont('helvetica','',11);
             $pdf->SetY(145);
             $pdf->SetX(110);
-            $pdf->Multicell(80,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION));
+            $pdf->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION)));
             $pdf->SetY($pdf->GetY()+7);
             $pdf->SetX(110);
             $pdf->Cell(4,4,utf8_decode("Cuenta con antecedentes policiales por: "));
