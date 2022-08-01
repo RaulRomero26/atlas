@@ -3,3 +3,6 @@
     RewriteRule ^$ public/ [L]
     RewriteRule (.*) public/$1 [L]
 </IfModule>
+<FilesMatch "\.(jpg|jpeg|png)$">
+    FileETag MTime Size
+    </FilesMatch>

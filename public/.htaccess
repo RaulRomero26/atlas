@@ -6,5 +6,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f 
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L] 
 </IfModule> 
-
+<FilesMatch "\.(jpg|jpeg|png)$">
+FileETag MTime Size
+</FilesMatch>
 
