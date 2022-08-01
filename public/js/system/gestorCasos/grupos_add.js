@@ -100,24 +100,31 @@ const readTableColonias = () => {
     return colonias;
 }
 const enviarImagenGrupo = async() => {
-    const type = 'File';
-    base64 = document.getElementById('fileFoto_grupo');
-    console.log(type);
-    nameImage = 'fileFoto_grupo';
-    let integrantes = [];
-    if (type != 'File') {
-        isPNG = base64.src.split('.');
-        if (isPNG[1] != undefined) {
-            await toDataURL(base64.src)
-                .then(myBase64 => {
-                    integrantes.push(dataImageGrupo(type, nameImage, myBase64));
-                })
+    console.log()
+   // const input =document.getElementById('imageContent_grupo').children[1].children[0];
+  //  console.log(input);
+    
+ //   if (input != undefined) {
+        const type = document.getElementById('images_row_grupo').classList[1],
+        base64 = document.getElementById('images_row_grupo');
+        console.log(type);
+        nameImage = 'fileFoto_grupo';
+        let integrantes = [];
+        if (type != 'File') {
+            isPNG = base64.src.split('.');
+            if (isPNG[1] != undefined) {
+                await toDataURL(base64.src)
+                    .then(myBase64 => {
+                        integrantes.push(dataImageGrupo(type, nameImage, myBase64));
+                    })
+            } else {
+                integrantes.push(dataImageGrupo(type, nameImage, base64.src));
+            }
         } else {
-            integrantes.push(dataImageGrupo(type, nameImage, base64.src));
+            integrantes.push(dataImageGrupo(type, nameImage, null));
         }
-    } else {
-        integrantes.push(dataImageGrupo(type, nameImage, null));
-    }
+ //   }
+    
     return integrantes;
 }
 const readTableSenas = async() => {
@@ -129,6 +136,8 @@ const readTableSenas = async() => {
         for (let i = 1; i < table.rows.length; i++) {
            
             const input = table.rows[i].cells[13].children[1].children[0];
+            console.log(table.rows[i].cells[13].children[1])
+            console.log(table.rows[i].cells[13].children[1].children[0])
             console.log(input);
             
             if (input != undefined) {

@@ -30,7 +30,7 @@ window.onload = function() {
         console.log(srcImageG);
         srcImageG = srcImageG.split('?')
         console.log(srcImageG);
-        if (data['grupo']['ANTECEDENTES'].length != 0 && srcImageG[0] != '.png') {
+        if (data['grupo']['FOTOGRAFIA'].length != 0 && srcImageG[0] != '.png') {
             createElementFotoGrupo(pathImagesFotosG + srcImageG[0], 'Photo');
         }else{
             createElementFotoGrupo(pathPlaceholderG, 'Photo')
@@ -63,8 +63,10 @@ window.onload = function() {
 
             if (rowsTableIntegrantes[i].PATH_IMAGEN.length != 0 && srcImage[0] != '.png') {
                 createElementFoto(pathImagesFotos + srcImage[0], i + 1, 'Photo');
+                console.log("if png",pathImagesFotos + srcImage[0])
             }else{
                 createElementFoto(pathPlaceholder, i + 1, 'Photo')
+                console.log("else png")
             }
 
             /*srcImage = rowsTableIntegrantes[i].PATH_IMAGEN

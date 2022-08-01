@@ -239,7 +239,7 @@ class GestorCasos extends Controller
                             $result = $this->uploadImageFileRemisiones("foto_grupo", $_FILES, $caso, $path_carpeta, "foto_grupo" . "." . $extension[1]);
                     }
                     if ($foto_grupo->row->typeImage == 'Photo') {
-                        $result = $this->uploadImagePhotoRemisiones("foto_grupo", $caso, $path_carpeta, $path_carpeta . "foto_grupo" . ".png");
+                        $result = $this->uploadImagePhotoRemisiones($foto_grupo->row->image, $caso, $path_carpeta, $path_carpeta . "foto_grupo" . ".png");
                     }
                 }
 
