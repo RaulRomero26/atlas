@@ -2,7 +2,7 @@ window.onload = function() {
     var no_grupo = document.getElementById('no_grupo')
     var myFormData = new FormData()
     myFormData.append('no_grupo', no_grupo.value)
-    console.log(myFormData.get('no_grupo'))
+    //console.log(myFormData.get('no_grupo'))
     fetch(base_url_js + 'GestorCasos/getGrupo', {
         method: 'POST',
         body: myFormData
@@ -11,9 +11,9 @@ window.onload = function() {
     .then(res => res.json())
 
     .then(data => {
-        console.log(data)
+        //console.log(data)
         //document.getElementById('no_grupo').value=
-        console.log("banda",data['grupo']['ID_BANDA'])
+        //console.log("banda",data['grupo']['ID_BANDA'])
         document.getElementById('principal_actividad').value=data['grupo']['PRINCIPALES_DELITOS']
         document.getElementById('nombre_grupo').value=data['grupo']['NOMBRE_BANDA']
         document.getElementById('delitos_asociados').value=data['grupo']['ACTIVIDADES_ILEGALES']
@@ -27,16 +27,16 @@ window.onload = function() {
         pathPlaceholderG = `${base_url_js}public/files/GestorCasos/placeholdergrupo.jpg`
         
         srcImageG = data['grupo']['FOTOGRAFIA']
-        console.log(srcImageG);
+        //console.log(srcImageG);
         srcImageG = srcImageG.split('?')
-        console.log(srcImageG);
+        //console.log(srcImageG);
         if (data['grupo']['FOTOGRAFIA'].length != 0 && srcImageG[0] != '.png') {
             createElementFotoGrupo(pathImagesFotosG + srcImageG[0], 'Photo');
         }else{
             createElementFotoGrupo(pathPlaceholderG, 'Photo')
         }
         const rowsTableIntegrantes = data.integrantes;
-        console.log(rowsTableIntegrantes)
+        //console.log(rowsTableIntegrantes)
         for (let i = 0; i < rowsTableIntegrantes.length; i++) {
     
             let formData = {
@@ -57,24 +57,24 @@ window.onload = function() {
             insertNewRowIntegrante(formData);
 
             srcImage = rowsTableIntegrantes[i].PATH_IMAGEN
-            console.log(srcImage);
+            //console.log(srcImage);
             srcImage = srcImage.split('?')
-            console.log(srcImage);
+            //console.log(srcImage);
 
             if (rowsTableIntegrantes[i].PATH_IMAGEN.length != 0 && srcImage[0] != '.png') {
                 createElementFoto(pathImagesFotos + srcImage[0], i + 1, 'Photo');
-                console.log("if png",pathImagesFotos + srcImage[0])
+                //console.log("if png",pathImagesFotos + srcImage[0])
             }else{
                 createElementFoto(pathPlaceholder, i + 1, 'Photo')
-                console.log("else png")
+                //console.log("else png")
             }
 
             /*srcImage = rowsTableIntegrantes[i].PATH_IMAGEN
-            console.log(srcImage);
+            //console.log(srcImage);
             srcImage = srcImage.split('?')
-            console.log(srcImage);
+            //console.log(srcImage);
             imagen = document.getElementById(`imageContent_row${i+1}`);
-            console.log(imagen);
+            //console.log(imagen);
             imagen.innerHTML += `
                 <div>
                     <div class="d-flex justify-content-end">
@@ -88,7 +88,7 @@ window.onload = function() {
         }
         zonas_s=data['grupo']['ZONAS'].split(",")
         colonias_s=data['grupo']['COLONIAS'].split("$")
-        console.log(zonas_s,colonias_s)
+        //console.log(zonas_s,colonias_s)
         for(let i=0;i<zonas_s.length;i++){
             if(zonas_s[i].trim()!="" && colonias_s[i].trim()!=""){
                 let formData = {

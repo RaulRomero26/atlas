@@ -1,7 +1,7 @@
 async function crear_guardar(e) {
     var msg_principalesError = document.getElementById('msg_principales')
-    console.log(e.target.id)
-    console.log("para guardar")
+    //console.log(e.target.id)
+    //console.log("para guardar")
     e.preventDefault();
 
     const button = document.getElementById(e.target.id);
@@ -17,7 +17,7 @@ async function crear_guardar(e) {
     } else if (e.target.id == "button_grupos_editar") {
         urlFetch += "/editGrupoFetch";//editar
     }
-    console.log(urlFetch)
+    //console.log(urlFetch)
     var formInsp = document.getElementById("grupo_delictivo");
     var myFormData = new FormData(formInsp);
     myFormData.append('integrantes_table', JSON.stringify(await readTableSenas()));
@@ -26,7 +26,7 @@ async function crear_guardar(e) {
     myFormData.append('foto_grupo', JSON.stringify(await enviarImagenGrupo()));
     myFormData.append('imagen_anterior', document.getElementById("images_row_grupo").src);
     for (var pair of myFormData.entries()) {
-         console.log(pair[0] + ', ' + pair[1]);
+         //console.log(pair[0] + ', ' + pair[1]);
     }
     fetch(urlFetch, {
         method: 'POST',
@@ -39,7 +39,7 @@ async function crear_guardar(e) {
         button.innerHTML = `
             Guardar
         `;
-        console.log(data.status)
+        //console.log(data.status)
         if (!data.status) {
             msg_principalesError.innerHTML = '<div class="alert alert-success text-center" role="alert">Hubo un error en la actualización</div>';
         }
@@ -100,14 +100,14 @@ const readTableColonias = () => {
     return colonias;
 }
 const enviarImagenGrupo = async() => {
-    console.log()
+    //console.log()
    // const input =document.getElementById('imageContent_grupo').children[1].children[0];
-  //  console.log(input);
+  //  //console.log(input);
     
  //   if (input != undefined) {
         const type = document.getElementById('images_row_grupo').classList[1],
         base64 = document.getElementById('images_row_grupo');
-        console.log(type);
+        //console.log(type);
         nameImage = 'fileFoto_grupo';
         let integrantes = [];
         if (type != 'File') {
@@ -136,14 +136,14 @@ const readTableSenas = async() => {
         for (let i = 1; i < table.rows.length; i++) {
            
             const input = table.rows[i].cells[13].children[1].children[0];
-            console.log(table.rows[i].cells[13].children[1])
-            console.log(table.rows[i].cells[13].children[1].children[0])
-            console.log(input);
+            //console.log(table.rows[i].cells[13].children[1])
+            //console.log(table.rows[i].cells[13].children[1].children[0])
+            //console.log(input);
             
             if (input != undefined) {
                 const type = input.children[2].classList[1],
                     base64 = document.getElementById('images_row_' + i);
-                    console.log(type);
+                    //console.log(type);
                 nameImage = 'foto_row' + i;
                 if (type != 'File') {
                     isPNG = base64.src.split('.');
