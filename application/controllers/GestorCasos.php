@@ -610,13 +610,13 @@ class GestorCasos extends Controller
     public function generarExportLinks($extra_cad = "", $filtro = 1)
     {
         if ($extra_cad != "") {
-            $dataReturn['csv'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
-            $dataReturn['excel'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['csv'] =  base_url . 'GestorCasos/exportarInfo/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['excel'] =  base_url . 'GestorCasos/exportarInfo/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
             $dataReturn['pdf'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=PDF' . $extra_cad . '&filtroActual=' . $filtro;
             //return $dataReturn;
         } else {
-            $dataReturn['csv'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
-            $dataReturn['excel'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['csv'] =  base_url . 'GestorCasos/exportarInfo/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['excel'] =  base_url . 'GestorCasos/exportarInfo/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
             $dataReturn['pdf'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=PDF' . $extra_cad . '&filtroActual=' . $filtro;
         }
         return $dataReturn;
@@ -688,6 +688,106 @@ class GestorCasos extends Controller
             header("Location: " . base_url . "Inicio");
             exit();
         }
+    }
+    public function exportarInfo()
+    {
+        if (!isset($_REQUEST['tipo_export'])) {
+            header("Location: " . base_url . "Inicio");
+            exit();
+        }
+        if (!isset($_REQUEST['filtroActual']) || !is_numeric($_REQUEST['filtroActual']) || !($_REQUEST['filtroActual'] >= MIN_FILTRO_GC) || !($_REQUEST['filtroActual'] <= MAX_FILTRO_GC))
+            $filtroActual = 1;
+        else
+            $filtroActual = $_REQUEST['filtroActual'];
+        $from_where_sentence = "";
+        if (isset($_REQUEST['cadena']))
+            $from_where_sentence = $this->GestorCaso->generateFromWhereSentence($_REQUEST['cadena'], $filtroActual);
+        else
+            $from_where_sentence = $this->GestorCaso->generateFromWhereSentence("", $filtroActual);
+        $rows_Veh = $this->GestorCaso->getAllInfoRemisionDByCadena($from_where_sentence);
+        switch ($filtroActual) {
+            case '1':
+                $filename = "GestorCasos";
+                $csv_data = "Nombre, Apellido Paterno, Apellido Materno, Categoria, Sexo, CURP, UDC, UTC, Alias, Perfil de FB, Descripcion, Antecedentes, Estatus, Nombre de la banda, Principales delitos, Peligrosidad, Zonas, Colonias, Actividades Ilegales, Fecha de creación \n";
+                $rows_Veh = $this->GestorCaso->getAllInfoRemisionDByCadena($from_where_sentence);
+                $ids_= array(); $j_cantidad=0;
+                for($i=0;$i<count($rows_Veh);$i++){
+                    if(!(in_array($rows_Veh[$i]->ID_BANDA, $ids_))){  
+                        $data[$j_cantidad] = $this->GestorCaso->getGrupoIndivicual($rows_Veh[$i]->ID_BANDA);
+                        array_push($ids_, $rows_Veh[$i]->ID_BANDA);
+                        $j_cantidad++;
+                    }
+                }
+              //  print_r($data);//$csv_data;
+                for($ii=0;$ii<count($data);$ii++){
+                    for($ij=0;$ij<count($data[$ii][0]['integrantes']);$ij++){  
+                        $csv_data .= "\" ".$data[$ii][0]['integrantes'][$ij]->NOMBRE . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->APELLIDO_PATERNO) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->APELLIDO_MATERNO) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->TIPO) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->SEXO) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->CURP) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->UDC) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->UTC) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->ALIAS) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->PERFIL_FACEBOOK) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->DESCRIPCION) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->ANTECEDENTES_PERSONA) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['integrantes'][$ij]->ESTATUS) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['grupo']->NOMBRE_BANDA) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['grupo']->PRINCIPALES_DELITOS) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['grupo']->PELIGROSIDAD) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['grupo']->ZONAS) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['grupo']->COLONIAS) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['grupo']->ACTIVIDADES_ILEGALES) . "\",\"" .
+                            mb_strtoupper($data[$ii][0]['grupo']->FECHAHORA) . "\"\n";
+                    }
+                }
+                break;
+                case '2':
+                    $filename = "GestorCasos";
+                    $csv_data = "Nombre, Apellido Paterno, Apellido Materno, Categoria, Sexo, CURP, UDC, UTC, Alias, Perfil de FB, Descripcion, Antecedentes, Estatus, Nombre de la banda, Principales delitos, Peligrosidad, Zonas, Colonias, Actividades Ilegales, Fecha de creación \n";
+                    $rows_Veh = $this->GestorCaso->getAllInfoRemisionDByCadena($from_where_sentence);
+                    $ids_= array(); $j_cantidad=0;
+                    for($i=0;$i<count($rows_Veh);$i++){
+                        if(!(in_array($rows_Veh[$i]->ID_BANDA, $ids_))){  
+                            $data[$j_cantidad] = $this->GestorCaso->getGrupoIndivicual($rows_Veh[$i]->ID_BANDA);
+                            array_push($ids_, $rows_Veh[$i]->ID_BANDA);
+                            $j_cantidad++;
+                        }
+                    }
+                  //  print_r($data);//$csv_data;
+                    for($ii=0;$ii<count($data);$ii++){
+                        for($ij=0;$ij<count($data[$ii][0]['integrantes']);$ij++){  
+                            $csv_data .= "\" ".$data[$ii][0]['integrantes'][$ij]->NOMBRE . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->APELLIDO_PATERNO) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->APELLIDO_MATERNO) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->TIPO) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->SEXO) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->CURP) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->UDC) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->UTC) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->ALIAS) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->PERFIL_FACEBOOK) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->DESCRIPCION) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->ANTECEDENTES_PERSONA) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['integrantes'][$ij]->ESTATUS) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['grupo']->NOMBRE_BANDA) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['grupo']->PRINCIPALES_DELITOS) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['grupo']->PELIGROSIDAD) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['grupo']->ZONAS) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['grupo']->COLONIAS) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['grupo']->ACTIVIDADES_ILEGALES) . "\",\"" .
+                                mb_strtoupper($data[$ii][0]['grupo']->FECHAHORA) . "\"\n";
+                        }
+                    }
+                    break;
+        }
+        $csv_data = utf8_decode($csv_data); //escribir información con formato utf8 por algún acento
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/force-download");
+        header("Content-Disposition: attachment; filename=" . $filename . ".csv");
+        echo $csv_data;
     }
 }
 ?>

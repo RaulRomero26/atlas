@@ -63,6 +63,10 @@
                         <i class="material-icons ssc md-36">picture_as_pdf</i>
                         <!--img src="<?= base_url ?>public/media/icons/pdfIcon.png" width="40px"--!-->
                     </a>
+                    <a id="id_link_excel" href="<?= base_url ?>gestorCasos/exportarInfo/?tipo_export=<?= "EXCEL".$cadenaExport.$filtroActual; ?>" class="btn" data-toggle="tooltip" data-placement="bottom" title="Exportar a Excel">
+                        <i class="material-icons ssc md-36">description</i>
+                        <!--img src="<?= base_url ?>public/media/icons/excelIcon.png" width="40px"--!-->
+                    </a>
                     
                 </div>
             </div>
@@ -78,7 +82,7 @@
                         if (isset($_SESSION['userdata']->rango_inicio_gc)) {
                             $r_inicio = $_SESSION['userdata']->rango_inicio_gc;
                             $r_fin = $_SESSION['userdata']->rango_fin_gc;
-                            echo (isset($data['filtroNombre']))?$data['filtroNombre']." | Rangos de (".$r_inicio.") a (".$r_fin.")":"Vista general";
+                            echo (isset($data['filtroNombre']))?$data['filtroNombre']."":"Vista general";
                              
                         }
                         else{
