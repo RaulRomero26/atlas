@@ -24,7 +24,8 @@ async function crear_guardar(e) {
     myFormData.append('zonas_final', readTableZonas());
     myFormData.append('colonias_final', readTableColonias());
     myFormData.append('foto_grupo', JSON.stringify(await enviarImagenGrupo()));
-    myFormData.append('imagen_anterior', document.getElementById("images_row_grupo").src);
+    if(document.getElementById("images_row_grupo")!=null)
+        myFormData.append('imagen_anterior', document.getElementById("images_row_grupo").src);
     for (var pair of myFormData.entries()) {
          //console.log(pair[0] + ', ' + pair[1]);
     }
@@ -105,6 +106,7 @@ const enviarImagenGrupo = async() => {
   //  //console.log(input);
     
  //   if (input != undefined) {
+    if (document.getElementById('images_row_grupo') != null) {
         const type = document.getElementById('images_row_grupo').classList[1],
         base64 = document.getElementById('images_row_grupo');
         //console.log(type);
@@ -123,9 +125,13 @@ const enviarImagenGrupo = async() => {
         } else {
             integrantes.push(dataImageGrupo(type, nameImage, null));
         }
+        return integrantes;
+    } else {
+        return [];
+    }
  //   }
     
-    return integrantes;
+    
 }
 const readTableSenas = async() => {
     const table = document.getElementById('integrantes_banda');

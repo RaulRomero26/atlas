@@ -59,7 +59,10 @@
                         $cadenaExport = (isset($data['cadena'])) ? ("&cadena=" . $data['cadena']) : "";
                         $filtroActual = "&filtroActual=".$data['filtroActual'];
                     ?>
-
+                    <a id="id_link_pdf" href="<?= base_url ?>gestorCasos/generarFicha/?tipo_export=<?= "PDF".$cadenaExport.$filtroActual; ?>" target="_blank" class="btn" data-toggle="tooltip" data-placement="bottom" title="Exportar a PDF">
+                        <i class="material-icons ssc md-36">picture_as_pdf</i>
+                        <!--img src="<?= base_url ?>public/media/icons/pdfIcon.png" width="40px"--!-->
+                    </a>
                     
                 </div>
             </div>

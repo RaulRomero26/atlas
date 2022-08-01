@@ -14,19 +14,23 @@ class GestorCaso
         $repla=['"','\''];
         $data['status'] = true;
         try{
+                $name2 = '';
                 $this->db->beginTransaction();  //inicia la transaction
-                $foto = json_decode($post['foto_grupo']);
-                $name2 = '';$date2 = date("Ymdhis");
-                if ($foto[0]->row->typeImage == 'File') {
-                    $type = $_FILES["foto_grupo"]['type'];
-                    $extension = explode("/", $type);
-                    if(count($extension)>1)
-                        $name2 = "foto_grupo" . "." . $extension[1] . "?v=" . $date2;
-                    else
-                        $name2 = ".png?v=" . $date2;
-                } else {
-                    $name2 = "foto_grupo" . ".png?v=" . $date2;
+                if(strcmp($post['foto_grupo'], "[]")!=0){
+                    $foto = json_decode($post['foto_grupo']);
+                    $name2 = '';$date2 = date("Ymdhis");
+                    if ($foto[0]->row->typeImage == 'File') {
+                        $type = $_FILES["foto_grupo"]['type'];
+                        $extension = explode("/", $type);
+                        if(count($extension)>1)
+                            $name2 = "foto_grupo" . "." . $extension[1] . "?v=" . $date2;
+                        else
+                            $name2 = ".png?v=" . $date2;
+                    } else {
+                        $name2 = "foto_grupo" . ".png?v=" . $date2;
+                    }
                 }
+                
                 $sql = "INSERT
                         INTO atlas_grupos(
                             NOMBRE_BANDA,
@@ -377,6 +381,33 @@ class GestorCaso
 
         return $data;
     }
-
+    public function getAllInfoRemisionDByCadena($from_where_sentence = "")
+    {
+        $sqlAux = "SELECT *"
+            . $from_where_sentence . "
+                    ";  //query a la DB
+        $this->db->query($sqlAux);          //se prepara el query mediante PDO
+        //$registros = $this->db->registers();  
+        //$regprint = print_r($registros);
+        return $this->db->registers();      //retorna todos los registros devueltos por la consulta
+    }
+    public function getGrupoIndivicual($no_grupo){
+        try {
+            $this->db->beginTransaction();
+            $grupos=[];
+            $sql = "SELECT * FROM atlas_grupos WHERE ID_BANDA =" . $no_grupo;
+            $this->db->query($sql);
+            $data['grupo'] = $this->db->register();
+            $sql = "SELECT * FROM atlas_personas WHERE ID_BANDA =" . $no_grupo;
+            $this->db->query($sql);
+            $data['integrantes'] = $this->db->registers();
+            array_push($grupos,$data);
+            $this->db->commit();
+        } catch (Exception $e) {
+            echo $e;
+            $this->db->rollBack();
+        }
+        return $grupos;
+    }
     
 }

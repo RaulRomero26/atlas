@@ -182,24 +182,27 @@ class GestorCasos extends Controller
                         $result = $this->uploadImagePhotoRemisiones($integrante->row->image, $caso, $path_carpeta, $path_carpeta . $integrante->row->nameImage . ".png");
                     }
                 }
-                foreach ($foto_grupos as $foto_grupo) {
-                    if ($foto_grupo->row->typeImage == 'File') {
-                        $type = $_FILES["foto_grupo"]['type'];
-                        $extension = explode("/", $type);
-                        if(count($extension)>1)
-                            $result = $this->uploadImageFileRemisiones("foto_grupo", $_FILES, $caso, $path_carpeta, "foto_grupo" . "." . $extension[1]);
-                    }
-                    if ($foto_grupo->row->typeImage == 'Photo') {
-                        $result = $this->uploadImagePhotoRemisiones("foto_grupo", $caso, $path_carpeta, $path_carpeta . "foto_grupo" . ".png");
+                if(!empty($foto_grupos)){
+                    foreach ($foto_grupos as $foto_grupo) {
+                        if ($foto_grupo->row->typeImage == 'File') {
+                            $type = $_FILES["foto_grupo"]['type'];
+                            $extension = explode("/", $type);
+                            if(count($extension)>1)
+                                $result = $this->uploadImageFileRemisiones("foto_grupo", $_FILES, $caso, $path_carpeta, "foto_grupo" . "." . $extension[1]);
+                        }
+                        if ($foto_grupo->row->typeImage == 'Photo') {
+                            $result = $this->uploadImagePhotoRemisiones("foto_grupo", $caso, $path_carpeta, $path_carpeta . "foto_grupo" . ".png");
+                        }
                     }
                 }
-                    $data_p['status'] =  true;
+                
+                $data_p['status'] =  true;
             
-                } else{
+            } else{
                     $data_p['status'] =  false;
-                }
             }
-            echo json_encode($data_p);
+        }
+        echo json_encode($data_p);
     }
 
     public function editGrupoFetch(){
@@ -425,7 +428,7 @@ class GestorCasos extends Controller
                             $infoTable['body'] .= '<td class="d-flex">';
                         }
                         $infoTable['body'] .= '
-                                                <a class="myLinks mt-3' . $permisos_FormatoFicha . '" data-toggle="tooltip" data-placement="right" title="Generar ficha" href="' . base_url . 'GestorCasos/generarFicha/?no_grupo=' . $row->ID_BANDA . '" target="_blank">
+                                                <a class="myLinks mt-3' . $permisos_FormatoFicha . '" data-toggle="tooltip" data-placement="right" title="Generar ficha" href="' . base_url . 'GestorCasos/generarFichaIndividual/?no_grupo=' . $row->ID_BANDA . '" target="_blank">
                                                     <i class="material-icons">file_present</i>
                                                 </a>
                                             </td>';
@@ -470,7 +473,7 @@ class GestorCasos extends Controller
                             $infoTable['body'] .= '<td class="d-flex">';
                         }
                         $infoTable['body'] .= '
-                                                <a class="myLinks mt-3' . $permisos_FormatoFicha . '" data-toggle="tooltip" data-placement="right" title="Generar ficha" href="' . base_url . 'GestorCasos/generarFicha/?no_grupo=' . $row->ID_BANDA . '" target="_blank">
+                                                <a class="myLinks mt-3' . $permisos_FormatoFicha . '" data-toggle="tooltip" data-placement="right" title="Generar ficha" href="' . base_url . 'GestorCasos/generarFichaIndividual/?no_grupo=' . $row->ID_BANDA . '" target="_blank">
                                                     <i class="material-icons">file_present</i>
                                                 </a>
                                             </td>';
@@ -500,7 +503,7 @@ class GestorCasos extends Controller
                 $campos = ['ID PERSONA', 'NOMBRE', 'SEXO', 'CURP', 'UDC', 'UTC', 'ALIAS', 'DESCRIPCION','ANTECEDENTES_PERSONAS', 'ESTATUS', 'NOMBRE BANDA'];
                 break;
             case '2':
-                $campos = ['ID BANDA', 'NOMBRE BANDA', 'PRINCIPALES DELITOS', 'ACTIVIDADES','ZONAS','COLONIAS' ,'ANTECEDENTES'];
+                $campos = ['ID BANDA', 'NOMBRE BANDA', 'PRINCIPALES DELITOS', 'ACTIVIDADES','PELIGROSIDAD','ZONAS','COLONIAS' ,'ANTECEDENTES'];
                 break;
         }
         //gestión de cada columna
@@ -607,27 +610,58 @@ class GestorCasos extends Controller
     public function generarExportLinks($extra_cad = "", $filtro = 1)
     {
         if ($extra_cad != "") {
-            $dataReturn['csv'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
-            $dataReturn['excel'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
-            $dataReturn['pdf'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=PDF' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['csv'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['excel'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['pdf'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=PDF' . $extra_cad . '&filtroActual=' . $filtro;
             //return $dataReturn;
         } else {
-            $dataReturn['csv'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
-            $dataReturn['excel'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
-            $dataReturn['pdf'] =  base_url . 'Remisiones/exportarInfo/?tipo_export=PDF' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['csv'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=CSV' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['excel'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=EXCEL' . $extra_cad . '&filtroActual=' . $filtro;
+            $dataReturn['pdf'] =  base_url . 'GestorCasos/generarFicha/?tipo_export=PDF' . $extra_cad . '&filtroActual=' . $filtro;
         }
         return $dataReturn;
     }
     public function generarFicha()
+    {
+    //    echo $_REQUEST['cadena'];
+        if (!isset($_REQUEST['filtroActual']) || !is_numeric($_REQUEST['filtroActual']) || !($_REQUEST['filtroActual'] >= MIN_FILTRO_GC) || !($_REQUEST['filtroActual'] <= MAX_FILTRO_GC))
+            $filtroActual = 1;
+        else
+            $filtroActual = $_REQUEST['filtroActual'];
+        $from_where_sentence = "";
+        if (isset($_REQUEST['cadena']))
+            $from_where_sentence = $this->GestorCaso->generateFromWhereSentence($_REQUEST['cadena'], $filtroActual);
+        else
+            $from_where_sentence = $this->GestorCaso->generateFromWhereSentence("", $filtroActual);
+        $rows_Veh = $this->GestorCaso->getAllInfoRemisionDByCadena($from_where_sentence);
+    //    echo $from_where_sentence;
+    //    echo $_REQUEST['cadena'];
+        $ids_= array(); $j_cantidad=0;
+        for($i=0;$i<count($rows_Veh);$i++){
+            if(!(in_array($rows_Veh[$i]->ID_BANDA, $ids_))){  
+                $data[$j_cantidad] = $this->GestorCaso->getGrupoIndivicual($rows_Veh[$i]->ID_BANDA);
+                array_push($ids_, $rows_Veh[$i]->ID_BANDA);
+                $j_cantidad++;
+            }
+        }
+        $this->view('system/gestorCasos/atlaspdf', $data);
+    }
+    public function generarFichaIndividual()
     {
         //comprobar los permisos para dejar pasar al módulo
         if (!isset($_SESSION['userdata']) || ($_SESSION['userdata']->Modo_Admin != 1 && $_SESSION['userdata']->Seguimientos[3] != '1')) {
             header("Location: " . base_url . "Inicio");
             exit();
         }
-        $data = $this->GestorCaso->obtenerTodo();
+        if (isset($_GET['no_grupo'])) {
+            $no_grupo = $_GET['no_grupo'];
+            $data = $this->GestorCaso->getGrupoIndivicual($no_grupo);
+        } else {
+            header("Location: " . base_url . "Inicio");
+            exit();
+        }
         
-        $this->view('system/gestorCasos/atlaspdf', $data);
+        $this->view('system/gestorCasos/atlaspdf-individual', $data);
     }
     
     //función fetch para buscar por la cadena introducida dependiendo del filtro
@@ -648,7 +682,7 @@ class GestorCasos extends Controller
             $dataReturn['total_rows'] = "Total registros: " . $results['total_rows'];
             $dataReturn['dropdownColumns'] = $this->generateDropdownColumns($filtroActual);
 
-
+            
             echo json_encode($dataReturn);
         } else {
             header("Location: " . base_url . "Inicio");

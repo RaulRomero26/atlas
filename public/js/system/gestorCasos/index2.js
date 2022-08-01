@@ -37,7 +37,7 @@ function buscarRemisionCad(e) {
 			document.getElementById('id_tbody').innerHTML = myJson.infoTable.body
 			document.getElementById('id_thead').innerHTML = myJson.infoTable.header
 			document.getElementById('id_pagination').innerHTML = myJson.links
-			document.getElementById('id_link_excel').href = myJson.export_links.excel
+		//	document.getElementById('id_link_excel').href = myJson.export_links.excel
 			document.getElementById('id_link_pdf').href = myJson.export_links.pdf
 			document.getElementById('id_total_rows').innerHTML = myJson.total_rows
 			document.getElementById('id_dropdownColumns').innerHTML = myJson.dropdownColumns

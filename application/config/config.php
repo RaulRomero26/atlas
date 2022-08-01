@@ -19,7 +19,7 @@
     define ('GLOBAL_LINKS_EXTREMOS', 4);
      //globals GESTOS DE CASOS
      define('MIN_FILTRO_GC', 1);
-     define('MAX_FILTRO_GC', 15);
+     define('MAX_FILTRO_GC', 2);
     //globales USUARIOS
     define('MIN_FILTRO_USER', 1);
     define('MAX_FILTRO_USER', 3);

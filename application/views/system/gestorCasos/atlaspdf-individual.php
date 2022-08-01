@@ -1,6 +1,5 @@
 <?php
 //print_r($data);
-//$data=$data[0];
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
 $archivo = '../public/media/pdf/casi-completo.pdf';
@@ -11,28 +10,26 @@ $pageId2 = $pdf->importPage(2);
 $pageId3 = $pdf->importPage(3);
 $pageId4 = $pdf->importPage(4);
 for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
-  //  print_r($data[$cantidad_grupo]) ;
-  //  print_r($data[$cantidad_grupo][0])['grupo'];
     $pdf->addPage();
     $pdf->useImportedPage($pageId, 1, 1,207,295);
     $pdf->SetFont('helvetica','',30);
     $pdf->SetTextColor(31, 56, 100);
     $pdf->SetY(45);
     $pdf->SetX(16);
-    $pdf->Cell(5,4,utf8_decode("\"".$data[$cantidad_grupo][0]['grupo']->NOMBRE_BANDA."\""));
+    $pdf->Cell(5,4,utf8_decode("\"".$data[$cantidad_grupo]['grupo']->NOMBRE_BANDA."\""));
     $pdf->SetTextColor(156, 156, 156);
     $pdf->SetFont('helvetica','',14);
     $pdf->SetY(55);
     $pdf->SetX(77);
-    $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['grupo']->PRINCIPALES_DELITOS));
+    $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['grupo']->PRINCIPALES_DELITOS));
     $pdf->SetFont('helvetica','',11);
     $pdf->SetTextColor(31, 56, 100);
     $pdf->SetY(75);
     $pdf->SetX(20);
-    $pdf->Multicell(75,4,utf8_decode($data[$cantidad_grupo][0]['grupo']->ANTECEDENTES));
+    $pdf->Multicell(75,4,utf8_decode($data[$cantidad_grupo]['grupo']->ANTECEDENTES));
     //fotografia
-    $imagen = explode("?", $data[$cantidad_grupo][0]['grupo']->FOTOGRAFIA);
-    $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo][0]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
+    $imagen = explode("?", $data[$cantidad_grupo]['grupo']->FOTOGRAFIA);
+    $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
    // echo($pathImagesFH);
     if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
         $type = exif_imagetype($pathImagesFH);
@@ -69,11 +66,11 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
     }
     $pdf->SetY(155);
     $pdf->SetX(102);
-    $pdf->Multicell(75,4,utf8_decode($data[$cantidad_grupo][0]['grupo']->PELIGROSIDAD));
+    $pdf->Multicell(75,4,utf8_decode($data[$cantidad_grupo]['grupo']->PELIGROSIDAD));
     $pdf->SetY(175);
     $pdf->SetX(102);
     $lideres=[];
-    foreach($data[$cantidad_grupo][0]['integrantes'] as $integrante){
+    foreach($data[$cantidad_grupo]['integrantes'] as $integrante){
         if($integrante->TIPO=="LIDER"){
             $cadena="";
             $cadena=$cadena.$integrante->NOMBRE." ".$integrante->APELLIDO_PATERNO." ".$integrante->APELLIDO_MATERNO." ";
@@ -88,18 +85,18 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
     }
     $pdf->SetY(200);
     $pdf->SetX(100);
-    $zonas=explode(",",$data[$cantidad_grupo][0]['grupo']->ZONAS);
-    $colonias=explode("$",$data[$cantidad_grupo][0]['grupo']->COLONIAS);
+    $zonas=explode(",",$data[$cantidad_grupo]['grupo']->ZONAS);
+    $colonias=explode("$",$data[$cantidad_grupo]['grupo']->COLONIAS);
     $zonas_final="";
     for($i=0;$i<count($zonas);$i++)
        $zonas_final=$zonas_final.$zonas[$i].": ".$colonias[$i];
     $pdf->Multicell(90,4,utf8_decode($zonas_final));
     $pdf->SetY(225);
     $pdf->SetX(100);
-    $pdf->Multicell(90,4,utf8_decode($data[$cantidad_grupo][0]['grupo']->ACTIVIDADES_ILEGALES));
-    $total=count($data[$cantidad_grupo][0]['integrantes']);
+    $pdf->Multicell(90,4,utf8_decode($data[$cantidad_grupo]['grupo']->ACTIVIDADES_ILEGALES));
+    $total=count($data[$cantidad_grupo]['integrantes']);
     $repla=['"','\'','\"','“','”'];
-    for($contador_integrantes=0;$contador_integrantes<count($data[$cantidad_grupo][0]['integrantes']);$contador_integrantes++){  
+    for($contador_integrantes=0;$contador_integrantes<count($data[$cantidad_grupo]['integrantes']);$contador_integrantes++){  
         if($contador_integrantes%2==0){
             if($contador_integrantes==$total-1){
                 $pdf->addPage();
@@ -118,10 +115,10 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
         if($contador_integrantes%2==0){
             $pdf->SetY(40);
             $pdf->SetX(22);
-            $pdf->Cell(5,4,utf8_decode(mb_strtoupper($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
+            $pdf->Cell(5,4,utf8_decode(mb_strtoupper($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
             //fotografia
-            $imagen = explode("?", $data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
-            $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo][0]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
+            $imagen = explode("?", $data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
+            $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
            // echo($pathImagesFH);
             if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
                 $type = exif_imagetype($pathImagesFH);
@@ -158,35 +155,35 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             }
             $pdf->SetY(50);
             $pdf->SetX(63);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ESTATUS));
+            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ESTATUS));
             $pdf->SetY(92);
             $pdf->SetX(48);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ALIAS));
+            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ALIAS));
             $pdf->SetY(99);
             $pdf->SetX(48);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->CURP));
+            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->CURP));
             $pdf->SetY(107);
             $pdf->SetX(48);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->UDC));
+            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->UDC));
             $pdf->SetY(120);
             $pdf->SetX(48);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->UTC));
+            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->UTC));
             $pdf->SetY(126);
             $pdf->SetX(48);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK));
+            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK));
             $pdf->SetFont('helvetica','',11);
             $pdf->SetY(145);
             $pdf->SetX(20);
            
-          //  echo (str_replace($repla, '`',$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->DESCRIPCION));
+          //  echo (str_replace($repla, '`',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION));
             
-            $pdf->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->DESCRIPCION)));
+            $pdf->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION)));
             $pdf->SetY($pdf->GetY()+7);
             $pdf->SetX(20);
             $pdf->Cell(4,4,utf8_decode("Cuenta con antecedentes policiales por: "));
             $pdf->SetY($pdf->GetY()+7);
             $pdf->SetX(25);
-            $antecedentes=explode("$",$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA);
+            $antecedentes=explode("$",$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA);
             for($i=0;$i<count($antecedentes);$i++){
                 $pdf->SetX(25);
                 $pdf->Multicell(80,4,utf8_decode(($i+1).".-".$antecedentes[$i]));
@@ -197,10 +194,10 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             $pdf->SetFont('helvetica','',11);
             $pdf->SetY(40);
             $pdf->SetX(110);
-            $pdf->Cell(5,4,utf8_decode(mb_strtoupper($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
+            $pdf->Cell(5,4,utf8_decode(mb_strtoupper($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
             //fotografia
-            $imagen = explode("?", $data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
-            $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo][0]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
+            $imagen = explode("?", $data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
+            $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
             if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
                 $type = exif_imagetype($pathImagesFH);
                 $extension = '';
@@ -238,32 +235,32 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             
             $pdf->SetY(50);
             $pdf->SetX(150);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ESTATUS));
+            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ESTATUS));
             $pdf->SetY(92);
             $pdf->SetX(135);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ALIAS));
+            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ALIAS));
             $pdf->SetY(99);
             $pdf->SetX(135);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->CURP));
+            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->CURP));
             $pdf->SetY(107);
             $pdf->SetX(135);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->UDC));
+            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->UDC));
             $pdf->SetY(120);
             $pdf->SetX(135);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->UTC));
+            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->UTC));
             $pdf->SetY(126);
             $pdf->SetX(135);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK));
+            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK));
             $pdf->SetFont('helvetica','',11);
             $pdf->SetY(145);
             $pdf->SetX(110);
-            $pdf->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->DESCRIPCION)));
+            $pdf->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION)));
             $pdf->SetY($pdf->GetY()+7);
             $pdf->SetX(110);
             $pdf->Cell(4,4,utf8_decode("Cuenta con antecedentes policiales por: "));
             $pdf->SetY($pdf->GetY()+7);
             $pdf->SetX(115);
-            $antecedentes=explode("$",$data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA);
+            $antecedentes=explode("$",$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA);
             for($i=0;$i<count($antecedentes);$i++){
                 $pdf->SetX(115);
                 $pdf->Multicell(80,4,utf8_decode(($i+1).".-".$antecedentes[$i]));
