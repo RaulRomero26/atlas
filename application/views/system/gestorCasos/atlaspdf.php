@@ -159,7 +159,9 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             }
             $pdf->SetY(50);
             $pdf->SetX(63);
+            $pdf->SetTextColor(255, 0, 0);
             $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ESTATUS));
+            $pdf->SetTextColor(31, 56, 100);
             $pdf->SetY(92);
             $pdf->SetX(48);
             $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ALIAS));
@@ -239,7 +241,9 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
             
             $pdf->SetY(50);
             $pdf->SetX(150);
+            $pdf->SetTextColor(255, 0, 0);
             $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ESTATUS));
+            $pdf->SetTextColor(31, 56, 100);
             $pdf->SetY(92);
             $pdf->SetX(135);
             $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo][0]['integrantes'][$contador_integrantes]->ALIAS));
