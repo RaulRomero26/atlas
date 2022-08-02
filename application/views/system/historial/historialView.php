@@ -17,16 +17,11 @@
             <div class="dropdown-menu" aria-labelledby="id_filtros">
                 
                 <a class="dropdown-item <?= ($data['filtroActual']==1)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=1">Vista general</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==2)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=2">Inicio de sesión</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==3)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=3">Crear remisión</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==4)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=4">Editar remisión</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==5)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=5">Validar remisión</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==6)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=6">Ver remisión</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==7)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=7">Consultar remisión</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==8)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=8">Crear inspección</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==9)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=9">Editar inspección</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==10)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=10">Ver inspección</a>
-                <a class="dropdown-item <?= ($data['filtroActual']==11)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=11">Consultar inspección</a>
+                <a class="dropdown-item <?= ($data['filtroActual']==2)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=2">Creación de Grupo Delictivos</a>
+                <a class="dropdown-item <?= ($data['filtroActual']==3)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=3">Edición de Grupo Delictivos</a>
+                <a class="dropdown-item <?= ($data['filtroActual']==4)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=4">Consulta de Ficha General</a>
+                <a class="dropdown-item <?= ($data['filtroActual']==5)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=5">Consulta de Ficha de Grupo</a>
+                <a class="dropdown-item <?= ($data['filtroActual']==6)?'active':'';?>" href="<?= base_url;?>Historiales/?filtro=6">Búsqueda por Término</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item <?= ($data['filtroActual']==12)?'active':'';?>" href="#" class="btn btn-filtro" data-toggle="modal" data-target="#filtro_rangos">
                     <span class="v-a-middle" >Por rango de fechas</span>

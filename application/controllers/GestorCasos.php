@@ -197,6 +197,10 @@ class GestorCasos extends Controller
                 }
                 
                 $data_p['status'] =  true;
+                $user = $_SESSION['userdata']->Id_Usuario;
+                $ip = $this->obtenerIp();
+                $descripcion = 'Creación de grupo delictivo: ' . $caso;
+                $this->GestorCaso->historial($user, $ip, 1, $descripcion);
             
             } else{
                     $data_p['status'] =  false;
@@ -245,6 +249,10 @@ class GestorCasos extends Controller
                         $result = $this->uploadImagePhotoRemisiones($foto_grupo->row->image, $caso, $path_carpeta, $path_carpeta . "foto_grupo" . ".png");
                     }
                 }
+                    $user = $_SESSION['userdata']->Id_Usuario;
+                    $ip = $this->obtenerIp();
+                    $descripcion = 'Edición de un grupo delictivo: ' . $caso;
+                    $this->GestorCaso->historial($user, $ip, 2, $descripcion);
 
                     $data_p['status'] =  true;
             
@@ -644,6 +652,10 @@ class GestorCasos extends Controller
                 $j_cantidad++;
             }
         }
+        $user = $_SESSION['userdata']->Id_Usuario;
+        $ip = $this->obtenerIp();
+        $descripcion = 'Consulta de Ficha General';
+        $this->GestorCaso->historial($user, $ip, 3, $descripcion);
         $this->view('system/gestorCasos/atlaspdf', $data);
     }
     public function generarFichaIndividual()
@@ -660,6 +672,10 @@ class GestorCasos extends Controller
             header("Location: " . base_url . "Inicio");
             exit();
         }
+        $user = $_SESSION['userdata']->Id_Usuario;
+        $ip = $this->obtenerIp();
+        $descripcion = 'Consulta de Ficha del grupo: ' . $no_grupo;
+        $this->GestorCaso->historial($user, $ip, 4, $descripcion);
         
         $this->view('system/gestorCasos/atlaspdf-individual', $data);
     }
@@ -681,7 +697,10 @@ class GestorCasos extends Controller
             $dataReturn['export_links'] = $this->generarExportLinks($extra_cad, $filtroActual);
             $dataReturn['total_rows'] = "Total registros: " . $results['total_rows'];
             $dataReturn['dropdownColumns'] = $this->generateDropdownColumns($filtroActual);
-
+            $user = $_SESSION['userdata']->Id_Usuario;
+            $ip = $this->obtenerIp();
+            $descripcion = 'Busqueda por término: ' . $cadena;
+            $this->GestorCaso->historial($user, $ip, 5, $descripcion);
             
             echo json_encode($dataReturn);
         } else {
@@ -700,10 +719,14 @@ class GestorCasos extends Controller
         else
             $filtroActual = $_REQUEST['filtroActual'];
         $from_where_sentence = "";
-        if (isset($_REQUEST['cadena']))
+        if (isset($_REQUEST['cadena'])){
             $from_where_sentence = $this->GestorCaso->generateFromWhereSentence($_REQUEST['cadena'], $filtroActual);
-        else
+            $cadena=$_REQUEST['cadena'];
+        }
+        else{
             $from_where_sentence = $this->GestorCaso->generateFromWhereSentence("", $filtroActual);
+            $cadena="";
+        }
         $rows_Veh = $this->GestorCaso->getAllInfoRemisionDByCadena($from_where_sentence);
         switch ($filtroActual) {
             case '1':
@@ -787,7 +810,23 @@ class GestorCasos extends Controller
         header("Content-Description: File Transfer");
         header("Content-Type: application/force-download");
         header("Content-Disposition: attachment; filename=" . $filename . ".csv");
+        $user = $_SESSION['userdata']->Id_Usuario;
+        $ip = $this->obtenerIp();
+        $descripcion = 'Generacion de excel: ' . $cadena;
+        $this->GestorCaso->historial($user, $ip, 6, $descripcion);
         echo $csv_data;
+    }
+    public function obtenerIp()
+    {
+        $hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+        $hosts = gethostbynamel($hostname);
+        if (is_array($hosts)) {
+            foreach ($hosts as $ip) {
+                return $ip;
+            }
+        } else {
+            return $ip = '0.0.0.0';
+        }
     }
 }
 ?>

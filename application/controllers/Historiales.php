@@ -100,36 +100,20 @@
 					$data['filtroNombre'] = "Todos";
 				break;
 				case '2':
-					$data['filtroNombre'] = "Inicio de sesión";
+					$data['filtroNombre'] = "Creación de un Grupo Delictivo";
 				break;
 				case '3':
-					$data['filtroNombre'] = "Crear remisión";
+					$data['filtroNombre'] = "Edición de un Grupo Delictivo";
 				break;
 				case '4':
-					$data['filtroNombre'] = "Editar remisión";
+					$data['filtroNombre'] = "Consulta de Ficha General";
 				break;
 				case '5':
-					$data['filtroNombre'] = "Validar remisión";
+					$data['filtroNombre'] = "Consulta de Ficha de Grupo";
 				break;
 				case '6':
-					$data['filtroNombre'] = "Ver remisión";
+					$data['filtroNombre'] = "Búsqueda por Término";
 				break;
-				case '7':
-					$data['filtroNombre'] = "Consultar remisión";
-				break;
-				case '8':
-					$data['filtroNombre'] = "Crear inspección";
-				break;
-				case '9':
-					$data['filtroNombre'] = "Editar inspección";
-				break;
-				case '10':
-					$data['filtroNombre'] = "Ver inspección";
-				break;
-				case '11':
-					$data['filtroNombre'] = "Consultar inspección";
-				break;
-				
 			}
 
 
@@ -154,34 +138,22 @@
 			foreach($rows as $row){
 				switch($row->Movimiento){
 					case '1':
-						$movimiento = $row->Movimiento.'. Inicio de sesión';
+						$movimiento = $row->Movimiento.'. Creación';
 					break;
 					case '2':
-						$movimiento = $row->Movimiento.'. Crear remisión';
+						$movimiento = $row->Movimiento.'. Edición';
 					break;
 					case '3':
-						$movimiento = $row->Movimiento.'. Editar remisión';
+						$movimiento = $row->Movimiento.'. Consulta General';
 					break;
 					case '4':
-						$movimiento = $row->Movimiento.'. Validar remisión';
+						$movimiento = $row->Movimiento.'. Consulta de Grupo';
 					break;
 					case '5':
-						$movimiento = $row->Movimiento.'. Ver remisión';
+						$movimiento = $row->Movimiento.'. Búsqueda';
 					break;
 					case '6':
-						$movimiento = $row->Movimiento.'. Consultar remisión';
-					break;
-					case '7':
-						$movimiento = $row->Movimiento.'. Crear inspección';
-					break;
-					case '8':
-						$movimiento = $row->Movimiento.'. Editar inspección';
-					break;
-					case '9':
-						$movimiento = $row->Movimiento.'. Ver inspección';
-					break;
-					case '10':
-						$movimiento = $row->Movimiento.'. Consultar inspección';
+						$movimiento = $row->Movimiento.'. Descarga';
 					break;
 				}
 				$infoTable['body'].='<tr>';
@@ -376,28 +348,22 @@
 				foreach ($rows_HIS as $row) {
 					switch($row->Movimiento){
 						case '1':
-							$movimiento = $row->Movimiento.'. Inicio de sesión';
+							$movimiento = $row->Movimiento.'. Creación';
 						break;
 						case '2':
-							$movimiento = $row->Movimiento.'. Crear remisión';
+							$movimiento = $row->Movimiento.'. Edición';
 						break;
 						case '3':
-							$movimiento = $row->Movimiento.'. Actualizar remisión';
+							$movimiento = $row->Movimiento.'. Consulta General';
 						break;
 						case '4':
-							$movimiento = $row->Movimiento.'. Validar remisión';
+							$movimiento = $row->Movimiento.'. Consulta de Grupo';
 						break;
 						case '5':
-							$movimiento = $row->Movimiento.'. Crear seguimiento a persona';
+							$movimiento = $row->Movimiento.'. Búsqueda';
 						break;
 						case '6':
-							$movimiento = $row->Movimiento.'. Editar seguimiento a persona';
-						break;
-						case '7':
-							$movimiento = $row->Movimiento.'. Crear seguimiento a vehículo';
-						break;
-						case '8':
-							$movimiento = $row->Movimiento.'. Editar seguimiento a vehículo';
+							$movimiento = $row->Movimiento.'. Descarga';
 						break;
 					}
 					$csv_data.= $row->User_Name.",\"".

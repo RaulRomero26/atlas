@@ -9,28 +9,19 @@
             $filtro = 'Vista general';
         break;
         case '2':
-            $filtro = 'Inicio de sesión';
+            $filtro = 'Creación de Grupo Delictivos';
         break;
         case '3':
-            $filtro = 'Crear remisión';
+            $filtro = 'Edición de Grupo Delictivosn';
         break;
         case '4':
-            $filtro = 'Actualizar remisión';
+            $filtro = 'Consulta de Ficha General';
         break;
         case '5':
-            $filtro = 'Validar remisión';
+            $filtro = 'Consulta de Ficha de Grupo';
         break;
         case '6':
-            $filtro = 'Crear seguimiento persona';
-        break;
-        case '7':
-            $filtro = 'Editar seguimiento persona';
-        break;
-        case '8':
-            $filtro = 'Crear seguimiento vehiculo';
-        break;
-        case '9':
-            $filtro = 'Editar seguimiento vehiculo';
+            $filtro = 'Búsqueda por Término';
         break;
     }
 ?>

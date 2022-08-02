@@ -409,5 +409,38 @@ class GestorCaso
         }
         return $grupos;
     }
+    public function historial($user, $ip, $movimiento, $descripcion)
+    {
+        $band = true;
+        try {
+
+            $this->db->beginTransaction();
+
+            $sql = " INSERT
+                    INTO historial(
+                        Id_Usuario,
+                        Ip_Acceso,
+                        Movimiento,
+                        Descripcion
+                    )
+                    VALUES(
+                        trim($user),
+                        '" . trim($ip) . "',
+                        trim($movimiento),
+                        '" . trim($descripcion) . "'
+                    )
+            ";
+            $this->db->query($sql);
+            $this->db->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            echo "Sucedio un error " . $e;
+            $band = false;
+            $this->db->rollBack();
+        }
+
+        return $band;
+    }
     
 }
