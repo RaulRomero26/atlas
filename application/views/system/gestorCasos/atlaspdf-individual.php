@@ -89,7 +89,8 @@ for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
     $colonias=explode("$",$data[$cantidad_grupo]['grupo']->COLONIAS);
     $zonas_final="";
     for($i=0;$i<count($zonas);$i++)
-       $zonas_final=$zonas_final.$zonas[$i].": ".$colonias[$i];
+        if($zonas[$i]!="")
+            $zonas_final=$zonas_final.$zonas[$i].": ".$colonias[$i];
     $pdf->Multicell(90,4,utf8_decode($zonas_final));
     $pdf->SetY(225);
     $pdf->SetX(100);
