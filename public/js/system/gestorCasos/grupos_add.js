@@ -52,9 +52,9 @@ async function crear_guardar(e) {
             });
 
             msg_principalesError.innerHTML = '<div class="alert alert-success text-center" role="alert">Información actualizada con éxito</div>';
-            /*setInterval(() => {
+            setInterval(() => {
                 window.location = base_url_js + "GestorCasos/index";
-            }, 500);*/
+            }, 900);
             // result.tab === '1' ? '' : document.getElementById('save-tab-0').style.display = 'block';
         }
     })
