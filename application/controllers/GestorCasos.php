@@ -656,7 +656,7 @@ class GestorCasos extends Controller
         $ip = $this->obtenerIp();
         $descripcion = 'Consulta de Ficha General';
         $this->GestorCaso->historial($user, $ip, 3, $descripcion);
-        $this->view('system/gestorCasos/atlaspdf', $data);
+        $this->view('system/gestorCasos/atlaspdf2', $data);
     }
     public function generarFichaIndividual()
     {
@@ -677,7 +677,7 @@ class GestorCasos extends Controller
         $descripcion = 'Consulta de Ficha del grupo: ' . $no_grupo;
         $this->GestorCaso->historial($user, $ip, 4, $descripcion);
         
-        $this->view('system/gestorCasos/atlaspdf-individual', $data);
+        $this->view('system/gestorCasos/atlaspdf-individual3', $data);
     }
     
     //función fetch para buscar por la cadena introducida dependiendo del filtro
