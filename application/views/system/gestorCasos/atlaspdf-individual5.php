@@ -217,48 +217,10 @@ class PDF extends FPDF
             $this->Multicell(80,4,utf8_decode("-".$lideres[$i]));
         }
         $this->AddPage();
+        $this->SetCol(0);
         $repla=['"','\'','\"','“','”'];
         for($contador_integrantes=0;$contador_integrantes<count($data[0]['integrantes']);$contador_integrantes++){
-            if($bandera==0){
-                if($contador_integrantes%2==0){
-                    
-                    $this->SetCol(0);
-                    if($contador_integrantes!=0)
-                        $this->addPage();
-                    
-                }
-                else{
-                    if($this->col!=0)
-                        $this->SetCol(1);
-                    else    
-                        $this->SetCol(0);
-                }
-                    
-            }
-            else{
-                if($this->col!=0){
-                    $this->addPage();
-                 //   $this->SetCol(0);
-                }
-                $bandera=0;
-            }
-        /*    if($contador_integrantes%2==0){
-                if($bandera==0){
-                    $this->SetCol(0);
-                    if($contador_integrantes!=0)
-                        $this->addPage();
-                }
-                else
-                    $bandera=0;  
-                    
-                    
-            }
-            else{
-                if ($bandera==0)
-                    $this->SetCol(1);
-                else
-                    $bandera=0;   
-            }*/
+            
             $this->SetTextColor(31, 56, 100);
             $this->SetY($this->GetY()+5);
             $this->Cell(5,4,utf8_decode(mb_strtoupper($data[0]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[0]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[0]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
@@ -328,11 +290,16 @@ class PDF extends FPDF
                     } 
                 }
                 if($this->GetY()>150){
-                    $this->SetCol(1);
+                    if($this->col==0)
+                        $this->SetCol(1);
+                    else{
+                        if($contador_integrantes!=count($data[0]['integrantes'])-1 )   
+                            $this->AddPage();
+                        $this->SetCol(0);
+                    }
                     $this->SetY(20);
                 }
-                else   
-                    $bandera=1;
+                
         }
     }
 

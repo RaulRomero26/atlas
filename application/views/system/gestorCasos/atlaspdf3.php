@@ -102,10 +102,13 @@ class PDF extends FPDF
         $this->SetFont('helvetica','B',12);
         $this->SetTextColor(31, 56, 100);
         $this->SetDrawColor(31,56,100);
+        $this->SetY(63);
+        $this->SetX(20);
         $this->Multicell(75,4,"Antecedentes",'C');
-        $this->Line(10, $this->GetY()+2, 85, $this->GetY()+2);
+        $this->Line(20, $this->GetY()+2, 95, $this->GetY()+2);
         $this->SetFont('helvetica','',11);
-        $this->Ln();
+        $this->SetY(75);
+        $this->SetX(20);
         $this->Multicell(75,4,utf8_decode($data[0]['grupo']->ANTECEDENTES));
        // $this->MultiCell(95,5,$data[0]['integrantes'][1]->DESCRIPCION);
         $this->Ln();
@@ -217,48 +220,10 @@ class PDF extends FPDF
             $this->Multicell(80,4,utf8_decode("-".$lideres[$i]));
         }
         $this->AddPage();
+        $this->SetCol(0);
         $repla=['"','\'','\"','“','”'];
         for($contador_integrantes=0;$contador_integrantes<count($data[0]['integrantes']);$contador_integrantes++){
-            if($bandera==0){
-                if($contador_integrantes%2==0){
-                    
-                    $this->SetCol(0);
-                    if($contador_integrantes!=0)
-                        $this->addPage();
-                    
-                }
-                else{
-                    if($this->col!=0)
-                        $this->SetCol(1);
-                    else    
-                        $this->SetCol(0);
-                }
-                    
-            }
-            else{
-                if($this->col!=0){
-                    $this->addPage();
-                 //   $this->SetCol(0);
-                }
-                $bandera=0;
-            }
-        /*    if($contador_integrantes%2==0){
-                if($bandera==0){
-                    $this->SetCol(0);
-                    if($contador_integrantes!=0)
-                        $this->addPage();
-                }
-                else
-                    $bandera=0;  
-                    
-                    
-            }
-            else{
-                if ($bandera==0)
-                    $this->SetCol(1);
-                else
-                    $bandera=0;   
-            }*/
+            
             $this->SetTextColor(31, 56, 100);
             $this->SetY($this->GetY()+5);
             $this->Cell(5,4,utf8_decode(mb_strtoupper($data[0]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[0]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[0]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
@@ -328,20 +293,27 @@ class PDF extends FPDF
                     } 
                 }
                 if($this->GetY()>150){
-                    $this->SetCol(1);
+                    if($this->col==0)
+                        $this->SetCol(1);
+                    else{
+                        if($contador_integrantes!=count($data[0]['integrantes'])-1 )   
+                            $this->AddPage();
+                        $this->SetCol(0);
+                    }
                     $this->SetY(20);
                 }
-                else   
-                    $bandera=1;
+                
         }
     }
-
     function PrintChapter($data)
     {
         // Add chapter
-        $this->AddPage();
-        $this->ChapterTitle($data);
-        $this->ChapterBody($data);
+        for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
+            $this->AddPage();
+            $this->ChapterTitle($data[$cantidad_grupo]);
+            $this->ChapterBody($data[$cantidad_grupo]);
+        }
+        
     }
 }
 
