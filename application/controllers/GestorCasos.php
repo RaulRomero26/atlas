@@ -677,7 +677,7 @@ class GestorCasos extends Controller
         $descripcion = 'Consulta de Ficha del grupo: ' . $no_grupo;
         $this->GestorCaso->historial($user, $ip, 4, $descripcion);
         
-        $this->view('system/gestorCasos/atlaspdf-individual5', $data);
+        $this->view('system/gestorCasos/atlaspdf-individual5', $data); //atlaspdf-individual5
     }
     
     //función fetch para buscar por la cadena introducida dependiendo del filtro

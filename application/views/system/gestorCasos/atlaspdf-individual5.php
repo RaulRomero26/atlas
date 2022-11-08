@@ -6,6 +6,31 @@ class PDF extends FPDF
     protected $col = 0; // Current column
     protected $y0;      // Ordinate of column start
 
+    function MultiCellRow($cells, $width, $height, $data, $pdf,$espacios_blancos)
+    {
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
+        $maxheight = 0;
+        for ($i = 0; $i < $cells; $i++) {
+
+            if($i == 1){
+                $this->SetFillColor(242,242,242);
+                $width = $width+20;
+            } else {
+                $this->SetFillColor(200,200,200);
+                $width = $width -10;
+                if($espacios_blancos > 0)
+                    $data[$i]= $data[$i].str_repeat(" ", $espacios_blancos);
+            }
+
+
+            $pdf->MultiCell($width, $height, $data[$i],0,1,'L',1);
+            if ($pdf->GetY() - $y > $maxheight) $maxheight = $pdf->GetY() - $y;
+            $pdf->SetXY($x + ($width * ($i + 1)), $y);
+        }
+        return $maxheight;
+    }
+
     function Header()
     {
         // Page header
@@ -223,8 +248,10 @@ class PDF extends FPDF
             
             $this->SetTextColor(31, 56, 100);
             $this->SetY($this->GetY()+5);
+            $this->SetFont('helvetica','B',12);
             $this->Cell(5,4,utf8_decode(mb_strtoupper($data[0]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[0]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[0]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
-                $this->Line($this->GetX()-5, $this->GetY()+5, $this->GetX()+80, $this->GetY()+5);
+            $this->SetFont('helvetica','',12);    
+            $this->Line($this->GetX()-5, $this->GetY()+5, $this->GetX()+80, $this->GetY()+5);
                 //fotografia
                 $imagen = explode("?", $data[0]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
                 $pathImagesFH = "http://localhost/atlas/public/files/GestorCasos/".$data[0]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
@@ -242,6 +269,8 @@ class PDF extends FPDF
                             $extension = 'png';
                         break;
                     }
+                    $this->SetLineWidth(0.5);
+                    $this->Rect($this->GetX()-1,$this->GetY()+9,40,44,"D");
                     $this->Image($pathImagesFH,$this->GetX(),$this->GetY()+10,38,42,$extension);
                 }
                 else{
@@ -259,22 +288,39 @@ class PDF extends FPDF
                             $extension = 'png';
                         break;
                     }
+                    $this->SetLineWidth(0.5);
+                    $this->Rect($this->GetX()-1,$this->GetY()+9,40,44,"D");
                     $this->Image($pathImagesFH,$this->GetX(),$this->GetY()+10,38,42,$extension);
                 }
                 $this->SetTextColor(255, 0, 0);
                 $this->SetY($this->GetY()+10);
-                $this->SetX($this->GetX()+43);
-                $this->Cell(40,10,utf8_decode($data[0]['integrantes'][$contador_integrantes]->ESTATUS),1,0,'C');
+                $this->SetX($this->GetX()+45);
+                $this->Cell(37,10,utf8_decode($data[0]['integrantes'][$contador_integrantes]->ESTATUS),1,0,'C');
                 $this->SetFillColor(200,200,200);
                 $this->SetTextColor(31, 56, 100);
                 $this->Ln();
                 $this->SetY($this->GetY()+33);
-                $this->Multicell(80,8,utf8_decode("Alias:    ".$data[0]['integrantes'][$contador_integrantes]->ALIAS),0,1,'L',1);
+                $espacios_blancos = strlen($data[0]['integrantes'][$contador_integrantes]->ALIAS)-5;
+                $maxheight = $this->MultiCellRow(2, 40, 10, ["Alias:",$data[0]['integrantes'][$contador_integrantes]->ALIAS],$this,$espacios_blancos);
+                $espacios_blancos = 1;
+                $this->SetY($this->GetY()+$maxheight);
+                $maxheight =$this->MultiCellRow(2, 40, 10, ["CURP: ",$data[0]['integrantes'][$contador_integrantes]->CURP],$this,$espacios_blancos);
+                $espacios_blancos = strlen($data[0]['integrantes'][$contador_integrantes]->UDC)-15;
+                $this->SetY($this->GetY()+$maxheight);
+                $maxheight =$this->MultiCellRow(2, 40, 10, ["UDC: ",$data[0]['integrantes'][$contador_integrantes]->UDC],$this,$espacios_blancos);
+                $espacios_blancos = 1;
+                $this->SetY($this->GetY()+$maxheight);
+                $maxheight =$this->MultiCellRow(2, 40, 10, ["UTC: ",$data[0]['integrantes'][$contador_integrantes]->UTC],$this,$espacios_blancos);
+                $espacios_blancos = strlen($data[0]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK)-18;
+                $this->SetY($this->GetY()+$maxheight);
+                $maxheight =$this->MultiCellRow(2, 40, 10, ["Facebook: ",$data[0]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK],$this,$espacios_blancos);
+
+                /*$this->Multicell(80,8,utf8_decode("Alias:    ".$data[0]['integrantes'][$contador_integrantes]->ALIAS),0,1,'L',1);
                 $this->Multicell(80,8,utf8_decode("CURP:   ".$data[0]['integrantes'][$contador_integrantes]->CURP),0,1,'L',1);
                 $this->Multicell(80,8,utf8_decode("UDC:      ".$data[0]['integrantes'][$contador_integrantes]->UDC),0,1,'L',1);
                 $this->Multicell(80,8,utf8_decode("UTC:      ".$data[0]['integrantes'][$contador_integrantes]->UTC),0,1,'L',1);
-                $this->Multicell(80,8,utf8_decode("Facebook: " .$data[0]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK),0,1,'R',1);
-                $this->SetY($this->GetY()+5);
+                $this->Multicell(80,8,utf8_decode("Facebook: " .$data[0]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK),0,1,'R',1);*/
+                $this->SetY($this->GetY()+$maxheight);
                 $this->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[0]['integrantes'][$contador_integrantes]->DESCRIPCION)),0,"J",false);
                 
                 if(trim($data[0]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA)!=""){
@@ -282,7 +328,9 @@ class PDF extends FPDF
                     for($i=0;$i<count($antecedentes);$i++){
                         if($i==0 && $antecedentes[$i]!=""){
                             $this->SetY($this->GetY()+5);
+                            $this->SetFont('helvetica','B',12);
                             $this->Cell(4,4,utf8_decode("Cuenta con antecedentes policiales por: "));
+                            $this->SetFont('helvetica','',12);
                             $this->SetY($this->GetY()+5);
                         }
                         $this->SetY($this->GetY()+3);
