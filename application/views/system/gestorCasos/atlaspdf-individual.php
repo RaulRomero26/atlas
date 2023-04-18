@@ -1,279 +1,439 @@
 <?php
-//print_r($data);
-use setasign\Fpdi\Fpdi;
-use setasign\Fpdi\PdfReader;
-$archivo = '../public/media/pdf/casi-completo.pdf';
-$pdf = new Fpdi();
-$pageCount = $pdf->setSourceFile($archivo);
-$pageId = $pdf->importPage(1);
-$pageId2 = $pdf->importPage(2);
-$pageId3 = $pdf->importPage(3);
-$pageId4 = $pdf->importPage(4);
-for($cantidad_grupo=0;$cantidad_grupo<count($data);$cantidad_grupo++){
-    $pdf->addPage();
-    $pdf->useImportedPage($pageId, 1, 1,207,295);
-    $pdf->SetFont('helvetica','',30);
-    $pdf->SetTextColor(31, 56, 100);
-    $pdf->SetY(45);
-    $pdf->SetX(16);
-    $pdf->Cell(5,4,utf8_decode("\"".$data[$cantidad_grupo]['grupo']->NOMBRE_BANDA."\""));
-    $pdf->SetTextColor(156, 156, 156);
-    $pdf->SetFont('helvetica','',14);
-    $pdf->SetY(55);
-    $pdf->SetX(77);
-    $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['grupo']->PRINCIPALES_DELITOS));
-    $pdf->SetFont('helvetica','',11);
-    $pdf->SetTextColor(31, 56, 100);
-    $pdf->SetY(75);
-    $pdf->SetX(20);
-    $pdf->Multicell(75,4,utf8_decode($data[$cantidad_grupo]['grupo']->ANTECEDENTES));
-    //fotografia
-    $imagen = explode("?", $data[$cantidad_grupo]['grupo']->FOTOGRAFIA);
-    $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
-   // echo($pathImagesFH);
-    if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
-        $type = exif_imagetype($pathImagesFH);
-        $extension = '';
-        switch($type){
-            case 1:
-                $extension = 'gif';
-            break;
-            case 2:
-                $extension = 'jpeg';
-            break;
-            case 3:
-                $extension = 'png';
-            break;
-        }
-        $pdf->Image($pathImagesFH,102,69,90,68,$extension);
-    }
-    else{
-        $pathImagesFH = base_url."public/files/GestorCasos/placeholdergrupo.jpg";
-        $type = exif_imagetype($pathImagesFH);
-        $extension = '';
-        switch($type){
-            case 1:
-                $extension = 'gif';
-            break;
-            case 2:
-                $extension = 'jpeg';
-            break;
-            case 3:
-                $extension = 'png';
-            break;
-        }
-        $pdf->Image($pathImagesFH,102,69,90,68,$extension);
-    }
-    $pdf->SetY(155);
-    $pdf->SetX(102);
-    $pdf->Multicell(75,4,utf8_decode($data[$cantidad_grupo]['grupo']->PELIGROSIDAD));
-    $pdf->SetY(175);
-    $pdf->SetX(102);
-    $lideres=[];
-    foreach($data[$cantidad_grupo]['integrantes'] as $integrante){
-        if($integrante->TIPO=="LIDER"){
-            $cadena="";
-            $cadena=$cadena.$integrante->NOMBRE." ".$integrante->APELLIDO_PATERNO." ".$integrante->APELLIDO_MATERNO." ";
-            if($integrante->ALIAS!="")  
-                $cadena=$cadena."(a) \"".$integrante->ALIAS."\"";
-            array_push($lideres,$cadena);
-        } 
-    }
-    for($i=0;$i<count($lideres);$i++){
-        $pdf->SetX(106);
-        $pdf->Multicell(80,4,utf8_decode("-".$lideres[$i]));
-    }
-    $pdf->SetY(200);
-    $pdf->SetX(100);
-    $zonas=explode(",",$data[$cantidad_grupo]['grupo']->ZONAS);
-    $colonias=explode("$",$data[$cantidad_grupo]['grupo']->COLONIAS);
-    $zonas_final="";
-    for($i=0;$i<count($zonas);$i++)
-        if($zonas[$i]!="")
-            $zonas_final=$zonas_final.$zonas[$i].": ".$colonias[$i];
-    $pdf->Multicell(90,4,utf8_decode($zonas_final));
-    $pdf->SetY(225);
-    $pdf->SetX(100);
-    $pdf->Multicell(90,4,utf8_decode($data[$cantidad_grupo]['grupo']->ACTIVIDADES_ILEGALES));
-    $total=count($data[$cantidad_grupo]['integrantes']);
-    $repla=['"','\'','\"','“','”'];
-    for($contador_integrantes=0;$contador_integrantes<count($data[$cantidad_grupo]['integrantes']);$contador_integrantes++){  
-        if($contador_integrantes%2==0){
-            if($contador_integrantes==$total-1){
-                $pdf->addPage();
-                $pdf->useImportedPage($pageId3, 1, 1,207,295);
-                $pdf->SetFont('helvetica','',11);
-                $pdf->SetTextColor(31, 56, 100);
+
+
+class PDF extends FPDF
+{
+    protected $col = 0; // Current column
+    protected $y0;      // Ordinate of column start
+
+    function MultiCellRow($cells, $width, $heightizq, $heightder, $data, $pdf,$espacios_blancos,$numllamado)
+    {
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
+        $maxheight = 0;
+        for ($i = 0; $i < $cells; $i++) {
+
+            if($i == 1){
+                $this->SetFillColor(242,242,242); //242
+                $x = $pdf->GetX()+$width;
+                $width = $width+25;
+            } else {
+                $this->SetFillColor(200,200,200); //200
+                $width = $width -10;
+                if($espacios_blancos > 0)
+                    $data[$i]= $data[$i].str_repeat(" ", $espacios_blancos);
             }
-            else{
-                $pdf->addPage();
-                $pdf->useImportedPage($pageId2, 1, 1,207,295);
-                $pdf->SetFont('helvetica','',11);
-                $pdf->SetTextColor(31, 56, 100);
+            $valortamaño=12;
+            $this->SetFont('helvetica','',$valortamaño);
+            // numero de llamado indica el renglon de la "tabla" 1 alias, 2 curp ,3 udc, 4 utc, 5 facebook, siendo el 2 y el 4 inamobibles de un renglon
+            $longituddatoderecha=0;
+            $longituddatoderecha = strlen($data[1]);
+            switch ($numllamado) {
+                case '1': //ALIAS
+                    if($i == 0){
+                        if( ($longituddatoderecha>=18) && ($longituddatoderecha<=30) ){
+                            $heightizq = 14;
+                        }
+                        $pdf->MultiCell($width, $heightizq, $data[$i],0,1,'L');
+                    }else{
+                        $pdf->MultiCell($width, $heightder, $data[$i],0,1,'L');
+                    }   
+                    break;
+
+                case '2': //CURP
+                    if($i == 0){
+                        $pdf->MultiCell($width, $heightizq, $data[$i],0,1,'L');
+                    }else{
+                        $pdf->MultiCell($width, $heightder, $data[$i],0,1,'L');
+                    }
+                    break;
+
+                case '3': //DOMICILIO
+                    if($i == 0){
+                        if( ($longituddatoderecha>=16) && ($longituddatoderecha<=35) ){
+                            $heightizq = 14;
+                        }else {
+                            if( ($longituddatoderecha>=36) && ($longituddatoderecha<=49) ){
+                                $heightizq = 21;
+                            }else {
+                                if( ($longituddatoderecha>=50) ){
+                                    $heightizq = 28;
+                                }
+                            }
+                        }
+                        $pdf->MultiCell($width, $heightizq, $data[$i],0,1,'L');
+                    }else{
+                        $pdf->MultiCell($width, $heightder, $data[$i],0,1,'L');
+                    }   
+                    break;
+
+                case '4': //TELEFONO
+                    if($i == 0){
+                        $pdf->MultiCell($width, $heightizq, $data[$i],0,1,'L');
+                    }else{
+                        $pdf->MultiCell($width, $heightder, $data[$i],0,1,'L');
+                    }
+                    break;
+
+                case '5': //FACEBOOK
+                    if($i == 0){
+                        if( ($longituddatoderecha>=24) && ($longituddatoderecha<=35) ){
+                            $heightizq = 14;
+                        }else {
+                            if( ($longituddatoderecha>=36) && ($longituddatoderecha<=60) ){
+                                $heightizq = 21;
+                            }
+                        }
+                        $pdf->MultiCell($width, $heightizq, $data[$i],0,1,'L');
+                    }else{
+                        $pdf->MultiCell($width, $heightder, $data[$i],0,1,'L');
+                    }   
+                    break;
+                
+                default:
+                    # code...
+                    break;
             }
+
+            if ($pdf->GetY() - $y > $maxheight) $maxheight = $pdf->GetY() - $y;
+            $pdf->SetXY($x + ($width * ($i + 1)), $y);
+            $this->SetFont('helvetica','',12);
+
         }
+        return $maxheight;
+    }
+
+    function Header()
+    {
+        // Page header
+        global $title;
+        /* ----- ----- ----- Variables ----- ----- ----- */
+        $banner             = 'http://localhost/atlas/public/media/images/logo22.png';
+        $this->Image($banner,80,0,50);
+        $this->SetX(50);
+    /*    $this->SetFont('Arial','B',15);
+        $w = $this->GetStringWidth($title)+6;
+        $this->SetX((210-$w)/2);
+        $this->SetDrawColor(0,80,180);
+        $this->SetFillColor(230,230,0);
+        $this->SetTextColor(220,50,50);
+        $this->SetLineWidth(1);
+        $this->Cell($w,9,$title,1,1,'C',true);*/
+        $this->Ln(10);
+        // Save ordinate
+        $this->y0 = $this->GetY()+10;
+    }
+
+    function Footer()
+    {
+        // Page footer
+        $banner= 'http://localhost/atlas/public/media/images/footeratlas2.png';
+        $this->Image($banner,10,277,180);
+     /*   $this->SetY(-15);
+        $this->SetFont('Arial','I',8);
+        $this->SetTextColor(128);
+        $this->Cell(0,10,'Page '.$this->PageNo(),0,0,'C');*/
+    }
+
+    function SetCol($col)
+    {
+        // Set position at a given column
+        $this->col = $col;
+        $x = 10+$col*97.5;
+        $this->SetLeftMargin($x);
+      //  $this->SetY(20);
+        $this->SetX($x);
+      //  $this->SetMargins(10,20);
        
-        if($contador_integrantes%2==0){
-            $pdf->SetY(40);
-            $pdf->SetX(22);
-            $pdf->Cell(5,4,utf8_decode(mb_strtoupper($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
-            //fotografia
-            $imagen = explode("?", $data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
-            $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
-           // echo($pathImagesFH);
-            if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
-                $type = exif_imagetype($pathImagesFH);
-                $extension = '';
-                switch($type){
-                    case 1:
-                        $extension = 'gif';
-                    break;
-                    case 2:
-                        $extension = 'jpeg';
-                    break;
-                    case 3:
-                        $extension = 'png';
-                    break;
-                }
-                $pdf->Image($pathImagesFH,23,47,38,42,$extension);
+    }
+
+    function AcceptPageBreak()
+    {
+     //   $this->SetY($this->GetY()+10);
+        if($this->col<1)
+        {
+            // Go to next column
+            $this->SetCol($this->col+1);
+            // Set ordinate to top
+            $this->SetY($this->y0-10);
+            // Keep on page
+            return false;
+        }
+        else
+        {
+            // Go back to first column
+            $this->SetCol(0);
+        //    $this->SetY(20);
+      //      $this->y0 = $this->y0+10;
+            // Page break
+            return true;
+        }
+    }
+
+    function ChapterTitle($data)
+    {
+        // Title
+        $this->SetFont('Arial','',12);
+        
+        $this->SetFont('helvetica','',30);
+        $this->SetTextColor(31, 56, 100);
+        $this->SetY(45);
+        $this->SetX(16);
+        $this->Cell(5,4,utf8_decode("\"".$data[0]['grupo']->NOMBRE_BANDA."\""));
+        $this->SetTextColor(156, 156, 156);
+        $this->SetFont('helvetica','',12);
+        $this->SetY(55);
+        $this->SetX(77);
+        $this->Cell(5,4,utf8_decode(strtoupper($data[0]['grupo']->PRINCIPALES_DELITOS)));
+        $this->Ln(4);
+        $this->y0 = $this->GetY();
+    }
+
+    function ChapterBody($data)
+    {
+        // Read text file
+    //  $txt = file_get_contents($file);
+        // Font
+     //   $this->SetFont('Times','',12);
+        // Output text in a 6 cm width column
+        $this->SetFont('helvetica','B',10);
+        $this->SetTextColor(31, 56, 100);
+        $this->SetDrawColor(31,56,100);
+        $this->Multicell(75,4,strtoupper("Antecedentes"),'C');
+        $this->Line(10, $this->GetY()+2, 85, $this->GetY()+2);
+        $this->SetFont('helvetica','',10);
+        $this->Ln();
+        $this->Multicell(75,4,utf8_decode(strtoupper($data[0]['grupo']->ANTECEDENTES)));
+       // $this->MultiCell(95,5,$data[0]['integrantes'][1]->DESCRIPCION);
+        $this->Ln();
+        // Mention
+        $this->SetFont('','I');
+       // $this->Cell(0,5,'(end of excerpt)');
+        // Go back to first column
+        $this->SetCol(1);
+        $imagen = explode("?", $data[0]['grupo']->FOTOGRAFIA);
+        $pathImagesFH = "http://localhost/atlas/public/files/GestorCasos/".$data[0]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
+        if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
+            $type = exif_imagetype($pathImagesFH);
+            $extension = '';
+            switch($type){
+                case 1:
+                    $extension = 'gif';
+                break;
+                case 2:
+                    $extension = 'jpeg';
+                break;
+                case 3:
+                    $extension = 'png';
+                break;
             }
-            else{
-                $pathImagesFH = base_url."public/files/GestorCasos/placeholderprofile.jpg";
-                $type = exif_imagetype($pathImagesFH);
-                $extension = '';
-                switch($type){
-                    case 1:
-                        $extension = 'gif';
-                    break;
-                    case 2:
-                        $extension = 'jpeg';
-                    break;
-                    case 3:
-                        $extension = 'png';
-                    break;
-                }
-                $pdf->Image($pathImagesFH,23,47,38,42,$extension);
-            }
-            $pdf->SetY(50);
-            $pdf->SetX(63);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ESTATUS));
-            $pdf->SetY(92);
-            $pdf->SetX(48);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ALIAS));
-            $pdf->SetY(99);
-            $pdf->SetX(48);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->CURP));
-            $pdf->SetY(107);
-            $pdf->SetX(48);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->UDC));
-            $pdf->SetY(120);
-            $pdf->SetX(48);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->UTC));
-            $pdf->SetY(126);
-            $pdf->SetX(48);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK));
-            $pdf->SetFont('helvetica','',11);
-            $pdf->SetY(145);
-            $pdf->SetX(20);
-           
-          //  echo (str_replace($repla, '`',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION));
-            
-            $pdf->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION)));
-            $pdf->SetY($pdf->GetY()+7);
-            $pdf->SetX(20);
-            $pdf->Cell(4,4,utf8_decode("Cuenta con antecedentes policiales por: "));
-            $pdf->SetY($pdf->GetY()+7);
-            $pdf->SetX(25);
-            $antecedentes=explode("$",$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA);
-            for($i=0;$i<count($antecedentes);$i++){
-                $pdf->SetX(25);
-                $pdf->Multicell(80,4,utf8_decode(($i+1).".-".$antecedentes[$i]));
-            }
+            $this->SetLineWidth(0.5);
+            $this->Rect(101,68,92,70,"D");
+            $this->Image($pathImagesFH,102,69,90,68,$extension);
         }
         else{
-            //------------------------------2
-            $pdf->SetFont('helvetica','',11);
-            $pdf->SetY(40);
-            $pdf->SetX(110);
-            $pdf->Cell(5,4,utf8_decode(mb_strtoupper($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
-            //fotografia
-            $imagen = explode("?", $data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
-            $pathImagesFH = base_url."public/files/GestorCasos/".$data[$cantidad_grupo]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
-            if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
-                $type = exif_imagetype($pathImagesFH);
-                $extension = '';
-                switch($type){
-                    case 1:
-                        $extension = 'gif';
-                    break;
-                    case 2:
-                        $extension = 'jpeg';
-                    break;
-                    case 3:
-                        $extension = 'png';
-                    break;
-                }
-                $pdf->Image($pathImagesFH,109,47,38,42,$extension);
+            $pathImagesFH = "http://localhost/atlas/public/files/GestorCasos/placeholdergrupo.jpg";
+            $type = exif_imagetype($pathImagesFH);
+            $extension = '';
+            switch($type){
+                case 1:
+                    $extension = 'gif';
+                break;
+                case 2:
+                    $extension = 'jpeg';
+                break;
+                case 3:
+                    $extension = 'png';
+                break;
             }
-            else{
-                $pathImagesFH = base_url."public/files/GestorCasos/placeholderprofile.jpg";
-                $type = exif_imagetype($pathImagesFH);
-                $extension = '';
-                switch($type){
-                    case 1:
-                        $extension = 'gif';
-                    break;
-                    case 2:
-                        $extension = 'jpeg';
-                    break;
-                    case 3:
-                        $extension = 'png';
-                    break;
-                }
-                $pdf->Image($pathImagesFH,109,47,38,42,$extension);
-            }
-            
-            
-            $pdf->SetY(50);
-            $pdf->SetX(150);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ESTATUS));
-            $pdf->SetY(92);
-            $pdf->SetX(135);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ALIAS));
-            $pdf->SetY(99);
-            $pdf->SetX(135);
-            $pdf->Cell(5,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->CURP));
-            $pdf->SetY(107);
-            $pdf->SetX(135);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->UDC));
-            $pdf->SetY(120);
-            $pdf->SetX(135);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->UTC));
-            $pdf->SetY(126);
-            $pdf->SetX(135);
-            $pdf->Multicell(50,4,utf8_decode($data[$cantidad_grupo]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK));
-            $pdf->SetFont('helvetica','',11);
-            $pdf->SetY(145);
-            $pdf->SetX(110);
-            $pdf->Multicell(80,4,utf8_decode(str_replace($repla, '"',$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->DESCRIPCION)));
-            $pdf->SetY($pdf->GetY()+7);
-            $pdf->SetX(110);
-            $pdf->Cell(4,4,utf8_decode("Cuenta con antecedentes policiales por: "));
-            $pdf->SetY($pdf->GetY()+7);
-            $pdf->SetX(115);
-            $antecedentes=explode("$",$data[$cantidad_grupo]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA);
-            for($i=0;$i<count($antecedentes);$i++){
-                $pdf->SetX(115);
-                $pdf->Multicell(80,4,utf8_decode(($i+1).".-".$antecedentes[$i]));
+            $this->Image($pathImagesFH,102,69,90,68,$extension);
+        }
+        $this->SetY(148);
+        $this->SetX(100);
+        $this->SetFont('helvetica','B',10);
+        $this->SetTextColor(31, 56, 100);
+        $this->SetDrawColor(31,56,100);
+        $this->Multicell(75,4,strtoupper("Peligrosidad"),'C');
+        $this->Line(100, $this->GetY()+2, 190, $this->GetY()+2);
+        $this->SetFont('helvetica','',10);
+        $this->SetY(155);
+        $this->SetX(102);
+        $this->Multicell(75,4,strtoupper(utf8_decode($data[0]['grupo']->PELIGROSIDAD)));
+
+        $this->SetFont('helvetica','B',10);
+        $this->SetTextColor(31, 56, 100);
+        $this->SetDrawColor(31,56,100);
+        $this->SetY($this->GetY()+4);
+        $this->SetX(100);
+        $this->Multicell(75,4,utf8_decode(strtoupper("Zonas de Operación")),'C');
+        $this->Line(100, $this->GetY()+2, 190, $this->GetY()+2);
+        $this->SetFont('helvetica','',10);
+        $this->SetY($this->GetY()+4);
+        $this->SetX(102);
+        
+        $zonas=explode(",",$data[0]['grupo']->ZONAS);
+        $colonias=explode("$",$data[0]['grupo']->COLONIAS);
+        $zonas_final="";
+        for($i=0;$i<count($zonas);$i++)
+            if($zonas[$i]!="")
+                $zonas_final=$zonas_final.$zonas[$i].": ".$colonias[$i];
+        $this->Multicell(90,4,utf8_decode(strtoupper($zonas_final)));
+
+        $this->SetFont('helvetica','B',10);
+        $this->SetTextColor(31, 56, 100);
+        $this->SetDrawColor(31,56,100);
+        $this->SetY($this->GetY()+4);
+        $this->SetX(100);
+        $this->Multicell(75,4,utf8_decode(strtoupper("Actividades ilegales")),'C');
+        $this->Line(100, $this->GetY()+2, 190, $this->GetY()+2);
+        $this->SetFont('helvetica','',11);
+        $this->SetY($this->GetY()+8);
+        $this->SetX(102);
+        $this->Multicell(90,4,utf8_decode(strtoupper($data[0]['grupo']->ACTIVIDADES_ILEGALES)));
+
+        $this->SetFont('helvetica','B',10);
+        $this->SetTextColor(31, 56, 100);
+        $this->SetDrawColor(31,56,100);
+        $this->SetY($this->GetY()+4);
+        $this->SetX(100);
+        $this->Multicell(75,4,utf8_decode(strtoupper("Líderes")),'C');
+        $this->Line(100, $this->GetY()+2, 190, $this->GetY()+2);
+        $this->SetFont('helvetica','',10);
+        $lideres=[];
+        $this->SetY($this->GetY()+4);
+        $bandera=0;
+        foreach($data[0]['integrantes'] as $integrante){
+            if($integrante->TIPO=="LIDER"){
+                $cadena="";
+                $cadena=$cadena.$integrante->NOMBRE." ".$integrante->APELLIDO_PATERNO." ".$integrante->APELLIDO_MATERNO." ";
+                if($integrante->ALIAS!="")  
+                    $cadena=$cadena."(a) \"".$integrante->ALIAS."\"";
+                array_push($lideres,$cadena);
             } 
         }
+        for($i=0;$i<count($lideres);$i++){
+            $this->SetX(106);
+            $this->Multicell(80,4,utf8_decode(strtoupper("-".$lideres[$i])));
+        }
+        $this->AddPage();
+        $this->SetCol(0);
+        $repla=['"','\'','\"','“','”'];
+        for($contador_integrantes=0;$contador_integrantes<count($data[0]['integrantes']);$contador_integrantes++){
+            
+            $this->SetTextColor(31, 56, 100);
+            $this->SetY($this->GetY()+5);
+            $this->SetFont('helvetica','B',10);
+            $this->Cell(5,4,utf8_decode(mb_strtoupper($data[0]['integrantes'][$contador_integrantes]->NOMBRE." ".$data[0]['integrantes'][$contador_integrantes]->APELLIDO_PATERNO." ".$data[0]['integrantes'][$contador_integrantes]->APELLIDO_MATERNO)));
+            $this->SetFont('helvetica','',12);    
+            $this->Line($this->GetX()-5, $this->GetY()+5, $this->GetX()+80, $this->GetY()+5);
+                //fotografia
+                $imagen = explode("?", $data[0]['integrantes'][$contador_integrantes]->PATH_IMAGEN);
+                $pathImagesFH = "http://localhost/atlas/public/files/GestorCasos/".$data[0]['grupo']->ID_BANDA."/Grupo/".$imagen[0];
+                if(isset($pathImagesFH) && getimagesize($pathImagesFH)){
+                    $type = exif_imagetype($pathImagesFH);
+                    $extension = '';
+                    switch($type){
+                        case 1:
+                            $extension = 'gif';
+                        break;
+                        case 2:
+                            $extension = 'jpeg';
+                        break;
+                        case 3:
+                            $extension = 'png';
+                        break;
+                    }
+                    $this->SetLineWidth(0.5);
+                    $this->Rect($this->GetX()-5,$this->GetY()+7,40,44,"D");
+                    $this->Image($pathImagesFH,$this->GetX()-4,$this->GetY()+8,38,42,$extension);
+                }
+                else{
+                    $pathImagesFH = "http://localhost/atlas/public/files/GestorCasos/placeholderprofile.jpg";
+                    $type = exif_imagetype($pathImagesFH);
+                    $extension = '';
+                    switch($type){
+                        case 1:
+                            $extension = 'gif';
+                        break;
+                        case 2:
+                            $extension = 'jpeg';
+                        break;
+                        case 3:
+                            $extension = 'png';
+                        break;
+                    }
+                    $this->SetLineWidth(0.5);
+                    $this->Rect($this->GetX()-5,$this->GetY()+7,40,44,"D");
+                    $this->Image($pathImagesFH,$this->GetX()-4,$this->GetY()+8,38,42,$extension);
+                }
+                $this->SetTextColor(255, 0, 0);
+                $this->SetY($this->GetY()+10);
+                $this->SetX($this->GetX()+45);
+                $this->Cell(37,10,utf8_decode($data[0]['integrantes'][$contador_integrantes]->ESTATUS),1,0,'C');
+                $this->SetFillColor(200,200,200);
+                $this->SetTextColor(31, 56, 100);
+                $this->Ln();
+                $this->SetY($this->GetY()+33);
+                $espacios_blancos = 1;//strlen($data[0]['integrantes'][$contador_integrantes]->ALIAS);
+                $maxheight = $this->MultiCellRow(2, 40, 7, 7, ["ALIAS:",strtoupper($data[0]['integrantes'][$contador_integrantes]->ALIAS)],$this,$espacios_blancos,1);
+                
+                $espacios_blancos = 1;
+                $this->SetY($this->GetY()+$maxheight);
+                $maxheight =$this->MultiCellRow(2, 40, 7, 7, ["CURP: ",strtoupper($data[0]['integrantes'][$contador_integrantes]->CURP)],$this,$espacios_blancos,2);
+                $espacios_blancos = 1;
+                $this->SetY($this->GetY()+$maxheight);
+                $maxheight =$this->MultiCellRow(2, 40, 7, 7, ["UDC: ",strtoupper($data[0]['integrantes'][$contador_integrantes]->UDC)],$this,$espacios_blancos,3);
+                $espacios_blancos = 1;
+                $this->SetY($this->GetY()+$maxheight);
+                $maxheight =$this->MultiCellRow(2, 40, 7,7, ["UTC: ",strtoupper($data[0]['integrantes'][$contador_integrantes]->UTC)],$this,$espacios_blancos,4);
+                $espacios_blancos = 1;
+                $this->SetY($this->GetY()+$maxheight);
+                $maxheight =$this->MultiCellRow(2, 40, 7, 7, ["FACEBOOK: ",$data[0]['integrantes'][$contador_integrantes]->PERFIL_FACEBOOK],$this,$espacios_blancos,5);
+
+                $this->SetY($this->GetY()+$maxheight+3);
+                $this->Multicell(80,4,utf8_decode(str_replace($repla, '"',strtoupper($data[0]['integrantes'][$contador_integrantes]->DESCRIPCION))),0,"J",false);
+                
+                if(trim($data[0]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA)!=""){
+                    $antecedentes=explode("$",$data[0]['integrantes'][$contador_integrantes]->ANTECEDENTES_PERSONA);
+                    for($i=0;$i<count($antecedentes);$i++){
+                        if($i==0 && $antecedentes[$i]!=""){
+                            $this->SetY($this->GetY()+5);
+                            $this->SetFont('helvetica','B',10);
+                            $this->Cell(4,4,utf8_decode(strtoupper("Cuenta con antecedentes policiales por: ")));
+                            $this->SetFont('helvetica','',10);
+                            $this->SetY($this->GetY()+5);
+                        }
+                        $this->SetY($this->GetY()+3);
+                        $this->Multicell(80,4,utf8_decode(strtoupper(($i+1).".-".$antecedentes[$i])));
+                    } 
+                }
+                if($this->GetY()>150){
+                    if($this->col==0)
+                        $this->SetCol(1);
+                    else{
+                        if($contador_integrantes!=count($data[0]['integrantes'])-1 )   
+                            $this->AddPage();
+                        $this->SetCol(0);
+                    }
+                    $this->SetY(20);
+                }
+                
+        }
     }
-    //----------------integrantes---------------------------------------------
-    ///----------------1
-    
-    
-    
-    
+
+    function PrintChapter($data)
+    {
+        // Add chapter
+        $this->AddPage();
+        $this->ChapterTitle($data);
+        $this->ChapterBody($data);
+    }
 }
-$pdf->Output('I', 'generated.pdf');
+
+$pdf = new PDF();
+$pdf->AddFont('Avenir','','avenir.php');
+$pdf->AliasNbPages();
+$pdf->PrintChapter($data);
+//$pdf->PrintChapter(2,'THE PROS AND CONS','20k_c2.txt');
+$pdf->Output();
 ?>

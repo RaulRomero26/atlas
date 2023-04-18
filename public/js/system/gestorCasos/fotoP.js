@@ -13,7 +13,7 @@ function uploadPhoto(apartado) {
         if (apartado === 'senas') {
             const index = canvas.classList.value;
             createElementSena(src, index, 'Photo');
-            document.getElementById('fileSena_row' + index).value = "";
+            document.getElementById('fileFoto_row' + index).value = "";
         } else {
             if (apartado === 'Inspecciones') {
                 createElementInspecciones(src);

@@ -54,6 +54,12 @@ a {
     text-decoration: none !important;
 }
 
+.smalltd{
+    max-width: 180px;
+}
+.smallfont{
+    font-size: 80%;
+}
 
 /*---- ----- ----- -----    paragraph_title    ----- ----- ----- ----*/
 
