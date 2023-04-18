@@ -40,7 +40,7 @@
                     </div>
                     <div class="d-flex justify-content-around" id="uploadContent_grupo">
                         <div class="form-group">
-                            <!-- <input type="file" name="foto_grupo" accept="image/*" id="fileFoto_grupo" class="inputfile uploadFileFotosGrupo mi_hide" onchange="uploadFile(event)" data-toggle="tooltip" data-placement="bottom"> -->
+                            <input type="file" name="foto_grupo" accept="image/*" id="fileFoto_grupo" class="inputfile uploadFileFotosGrupo mi_hide" onchange="uploadFile(event)" data-toggle="tooltip" data-placement="bottom">
                             <label for="fileFoto_grupo" >
                                 Foto del grupo
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cloud-upload" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

@@ -126,21 +126,27 @@ class GestorCaso
         $data['status'] = true;
     
         try{
-         //   print_r($_FILES);
+            //print_r($_FILES);
             $this->db->beginTransaction();  //inicia la transaction
             $foto = json_decode($post['foto_grupo']);
-            $name2 = '';$date2 = date("Ymdhis");
-            if ($foto[0]->row->typeImage == 'File') {
-                $type = $_FILES["foto_grupo"]['type'];
-                $extension = explode("/", $type);
-                if(count($extension)>1)
-                    $name2 = "foto_grupo" . "." . $extension[1] . "?v=" . $date2;
-                else{
-                    $ruta_anterior=explode("/",$post['imagen_anterior']);
-                    $name2 = $ruta_anterior[count($ruta_anterior)-1]."?v=" . $date2;
+            //print_r(empty($foto));
+            if(!empty($foto)){
+
+                $name2 = '';$date2 = date("Ymdhis");
+                if ($foto[0]->row->typeImage == 'File') {
+                    $type = $_FILES["foto_grupo"]['type'];
+                    $extension = explode("/", $type);
+                    if(count($extension)>1)
+                        $name2 = "foto_grupo" . "." . $extension[1] . "?v=" . $date2;
+                    else{
+                        $ruta_anterior=explode("/",$post['imagen_anterior']);
+                        $name2 = $ruta_anterior[count($ruta_anterior)-1]."?v=" . $date2;
+                    }
+                } else {
+                    $name2 = "foto_grupo" . ".png?v=" . $date2;
                 }
-            } else {
-                $name2 = "foto_grupo" . ".png?v=" . $date2;
+            }else {
+                $name2 = '';$date2 = date("Ymdhis");
             }
             $id_grupo = $post['no_grupo'];
             $data['grupo'] = $id_grupo;

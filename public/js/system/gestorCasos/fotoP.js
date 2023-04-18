@@ -148,6 +148,13 @@ const validateImage = (image) => {
 }
 
 function deleteImageFoto(index) {
+    console.log('INDEX DEL DELETE:',index)
+    if(index==='grupo'){
+        const div = document.getElementById('imageContent_grupo');
+        document.getElementById('fileFoto_grupo').value = '';
+        div.innerHTML = '';
+        return;
+    }
     const div = document.getElementById('imageContent_row' + index);
     document.getElementById('fileFoto_row' + index).value = '';
 
