@@ -229,6 +229,26 @@ const deleteRow = (obj, tableId) => {
                 }
             }
         }
+
+        if (tableId.id === 'integrantes_banda') {
+            table = document.getElementById('integrantes_banda')
+            for(let i=1;i<table.rows.length;i++){
+
+                let contenedorImg = table.rows[i].cells[13].childNodes[3];
+    
+                contenedorImg.setAttribute('id', 'imageContent_row'+i);
+                contenedorImg.childNodes[1].childNodes[3].setAttribute('id', 'images_row_'+i);
+    
+                let contenedorInput = table.rows[i].cells[13].childNodes[1];
+    
+                contenedorInput.setAttribute('id', 'uploadContent_row'+i);
+                contenedorInput.childNodes[1].childNodes[1].setAttribute('id', 'fileFoto_row'+i);
+                contenedorInput.childNodes[1].childNodes[1].setAttribute('name', 'foto_row'+i);
+                contenedorInput.childNodes[1].childNodes[3].setAttribute('for', 'fileFoto_row'+i);
+                //contenedorInput.childNodes[3].childNodes[1].setAttribute('id', 'row-'+i);
+    
+            }
+        }
     }
 
 }
